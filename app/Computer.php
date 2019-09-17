@@ -19,4 +19,9 @@ class Computer extends Model
     {
         return $this->belongsTo(ComputerBrand::class, 'brand');
     }
+
+    public function items()
+    {
+        return $this->hasMany(Item::class, 'computer_id', 'id');
+    }
 }

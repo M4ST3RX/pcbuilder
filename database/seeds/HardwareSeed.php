@@ -34,37 +34,49 @@ class HardwareSeed extends Seeder
                 'hardware_type_id' => 2,
                 'name' => 'CPU 1',
                 'price' => 10,
-                'data' => []
+                'data' => [
+                    'depends' => [6]
+                ]
             ],
             [
                 'hardware_type_id' => 2,
                 'name' => 'CPU 2',
                 'price' => 100,
-                'data' => []
+                'data' => [
+                    'depends' => [6]
+                ]
             ],
             [
                 'hardware_type_id' => 2,
                 'name' => 'CPU 3',
                 'price' => 1000,
-                'data' => []
+                'data' => [
+                    'depends' => [6]
+                ]
             ],
             [
                 'hardware_type_id' => 3,
                 'name' => 'RAM 1',
                 'price' => 10,
-                'data' => []
+                'data' => [
+                    'depends' => [6]
+                ]
             ],
             [
                 'hardware_type_id' => 3,
                 'name' => 'RAM 2',
                 'price' => 100,
-                'data' => []
+                'data' => [
+                    'depends' => [6]
+                ]
             ],
             [
                 'hardware_type_id' => 3,
                 'name' => 'RAM 3',
                 'price' => 1000,
-                'data' => []
+                'data' => [
+                    'depends' => [6]
+                ]
             ],
             [
                 'hardware_type_id' => 4,
@@ -101,11 +113,29 @@ class HardwareSeed extends Seeder
                 'name' => 'SSD 3',
                 'price' => 1000,
                 'data' => []
+            ],
+            [
+                'hardware_type_id' => 6,
+                'name' => 'MB 1',
+                'price' => 10,
+                'data' => []
+            ],
+            [
+                'hardware_type_id' => 6,
+                'name' => 'MB 2',
+                'price' => 100,
+                'data' => []
+            ],
+            [
+                'hardware_type_id' => 6,
+                'name' => 'MB 3',
+                'price' => 1000,
+                'data' => []
             ]
         ];
 
         foreach ($hardwares as $hardware){
-            \App\ComputerHardware::firstOrCreate([
+            \App\ComputerHardware::updateOrCreate([
                 'name' => $hardware['name']
             ],[
                 'hardware_type_id' => $hardware['hardware_type_id'],

@@ -6,8 +6,8 @@
             <div class="col-md-6 col-md-offset-3">
                 <div class="computers">
                     @if(count($computers) > 0)
-                        <div class="card flex-row flex-wr computer">
-                            @foreach($computers as $computer)
+                        @foreach($computers as $computer)
+                            <div class="card flex-row flex-wr computer">
                                 <div class="card-header border-0">
                                     <img src="https://placehold.it/120" alt="">
                                 </div>
@@ -19,8 +19,8 @@
                                         <a href="{{ route('computer.assembler', ['id' => $computer->id]) }}" role="button" class="btn btn-success">Assembler</a>
                                     </div>
                                 </div>
-                            @endforeach
-                        </div>
+                            </div>
+                        @endforeach
                     @else
                         <p>You don't have a computer. Buy parts at the Shop and assemble it.</p>
                     @endif

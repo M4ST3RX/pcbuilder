@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Computer;
+use App\HardwareType;
 use App\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class ComputerController extends Controller
 {
@@ -23,8 +25,10 @@ class ComputerController extends Controller
 
     public function assembler($id)
     {
-        $items = Item::where('user_id', Auth::id())->get();
         $computer = Computer::find($id);
+        if($computer->user_id !== Auth::id()) return redirect()->back();
+
+        $items = Item::where('user_id', Auth::id())->where('computer_id', null)->orWhere('computer_id', $computer->id)->get();
 
         return view('computer.assembler')->with(['items' => $items, 'computer' => $computer]);
     }
@@ -32,35 +36,43 @@ class ComputerController extends Controller
     public function add_part($id, $item_id)
     {
         $computer = Computer::find($id);
+        if($computer->user_id !== Auth::id()) return redirect()->back();
+
         $item = Item::find($item_id);
+        $data = json_decode($item->hardware->data, true);
+        $hasItem = false;
 
-        $data = array_merge(json_decode($computer->data, true), [
-            str_replace(' ', '_', strtolower($item->hardware->hardware_type->type)) => $item_id
-        ]);
+        if(isset($data['depends']) && !empty($data['depends'])) {
+            foreach ($computer->items as $item){
+                if(in_array($item->hardware->hardware_type->id, $data['depends'])) {
+                    $hasItem = true;
+                    break;
+                }
+            }
+        }
 
-        $item->in_computer = true;
-        $item->save();
+        if($hasItem || empty($data['depends'])){
+            $item->computer_id = $id;
+            $item->save();
+        } else {
+            $needed = HardwareType::find($data['depends'][0])->type;
+            Session::flash('message', 'The computer needs a '.$needed.' first!');
+            Session::flash('alert-class', 'alert-danger');
+        }
 
-        $computer->data = json_encode($data);
-        $computer->save();
-
-        return $this->assembler($id);
+        return redirect('computer/assembler/' . $id);
     }
 
     public function remove_part($id, $item_id)
     {
         $computer = Computer::find($id);
+        if($computer->user_id !== Auth::id()) return redirect()->back();
+
         $item = Item::find($item_id);
 
-        $data = json_decode($computer->data, true);
-        unset($data[str_replace(' ', '_', strtolower($item->hardware->hardware_type->type))]);
-
-        $item->in_computer = false;
+        $item->computer_id = null;
         $item->save();
 
-        $computer->data = json_encode($data);
-        $computer->save();
-
-        return $this->assembler($id);
+        return redirect('computer/assembler/' . $id);
     }
 }
