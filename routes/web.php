@@ -17,11 +17,23 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::group(['middleware' => ['computer']], function () {
+    Route::get('/computer/play/{id}', 'ComputerController@play')->name('computer.play');
+    Route::get('/computer/assembler/{id}', 'ComputerController@assembler')->name('computer.assembler');
+    Route::get('/computer/state/{id}', 'ComputerController@set_state')->name('computer.state');
+    Route::get('/computer/add-part/{id}/{item_id}', 'ComputerController@add_part')->name('computer.add-part');
+    Route::get('/computer/remove-part/{id}/{item_id}', 'ComputerController@remove_part')->name('computer.remove-part');
+    Route::get('/shop/buy/{id}', 'ShopController@purchase')->name('shop.buy');
+});
+
 Route::get('/computers', 'ComputerController@index')->name('computers');
-Route::get('/computer/assembler/{id}', 'ComputerController@assembler')->name('computer.assembler');
-Route::get('/computer/add-part/{id}/{item_id}', 'ComputerController@add_part')->name('computer.add-part');
-Route::get('/computer/remove-part/{id}/{item_id}', 'ComputerController@remove_part')->name('computer.remove-part');
 Route::get('/shop', 'ShopController@index')->name('shop');
-Route::get('/shop/buy/{id}', 'ShopController@purchase')->name('shop.buy');
+
+
 //Route::get('/shop/local', 'ShopController@findShop')->name('shop.local');
 //Route::get('/shop/{name}', 'ShopController@findShop')->name('shop');
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
+});

@@ -24,4 +24,34 @@ class Computer extends Model
     {
         return $this->hasMany(Item::class, 'computer_id', 'id');
     }
+
+    public function is_hdd()
+    {
+        $items = $this->items;
+        $isHdd = false;
+        foreach ($items as $item) {
+            if($item->hardware->hardware_type->type === 'Hard Disk Drive') {
+                $isHdd = true;
+                break;
+            }
+        }
+
+        return $isHdd;
+    }
+
+    public function video_power()
+    {
+        $items = $this->items;
+        $isHdd = false;
+        foreach ($items as $item) {
+            if($item->hardware->hardware_type->type === 'Video Card') {
+                
+                break;
+            }
+        }
+
+
+
+        return $isHdd;
+    }
 }

@@ -23,6 +23,20 @@ class ComputerController extends Controller
         return view('computer.select')->with(['computers' => $computers]);
     }
 
+    public function play($id)
+    {
+        $computer = Computer::find($id);
+        if($computer->state === 0){
+            Session::flash('message', 'The computer is not turned on.');
+            Session::flash('alert-class', 'alert-danger');
+            return redirect('/computers');
+        }
+
+        Session::put('computer_id', $id);
+
+        return view('computer.play')->with(['computer' => $computer]);
+    }
+
     public function assembler($id)
     {
         $computer = Computer::find($id);
@@ -36,7 +50,11 @@ class ComputerController extends Controller
     public function add_part($id, $item_id)
     {
         $computer = Computer::find($id);
-        if($computer->user_id !== Auth::id()) return redirect()->back();
+        if($computer->state === 1) {
+            Session::flash('message', 'Turn off the computer!');
+            Session::flash('alert-class', 'alert-danger');
+            return redirect('computer/assembler/' . $id);
+        }
 
         $item = Item::find($item_id);
         $data = json_decode($item->hardware->data, true);
@@ -66,7 +84,11 @@ class ComputerController extends Controller
     public function remove_part($id, $item_id)
     {
         $computer = Computer::find($id);
-        if($computer->user_id !== Auth::id()) return redirect()->back();
+        if($computer->state === 1) {
+            Session::flash('message', 'Turn off the computer!');
+            Session::flash('alert-class', 'alert-danger');
+            return redirect('computer/assembler/' . $id);
+        }
 
         $item = Item::find($item_id);
 
@@ -74,5 +96,14 @@ class ComputerController extends Controller
         $item->save();
 
         return redirect('computer/assembler/' . $id);
+    }
+
+    public function set_state($computer_id)
+    {
+        $computer = Computer::find($computer_id);
+        $computer->state = !$computer->state;
+        $computer->save();
+
+        return redirect('/computers/');
     }
 }
