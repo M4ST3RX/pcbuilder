@@ -131,6 +131,33 @@ class HardwareSeed extends Seeder
                 'name' => 'MB 3',
                 'price' => 1000,
                 'data' => []
+            ],
+            [
+                'hardware_type_id' => 7,
+                'name' => 'Video Card 1',
+                'price' => 10,
+                'data' => [
+                    'depends' => [6],
+                    'power' => 1
+                ]
+            ],
+            [
+                'hardware_type_id' => 7,
+                'name' => 'Video Card 2',
+                'price' => 100,
+                'data' => [
+                    'depends' => [6],
+                    'power' => 4.6
+                ]
+            ],
+            [
+                'hardware_type_id' => 7,
+                'name' => 'Video Card 3',
+                'price' => 1000,
+                'data' => [
+                    'depends' => [6],
+                    'power' => 17.2
+                ]
             ]
         ];
 

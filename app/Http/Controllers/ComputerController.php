@@ -70,7 +70,8 @@ class ComputerController extends Controller
         }
 
         if($hasItem || empty($data['depends'])){
-            $item->computer_id = $id;
+            $item->computer_id = $computer->id;
+            dd($item);
             $item->save();
         } else {
             $needed = HardwareType::find($data['depends'][0])->type;

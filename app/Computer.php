@@ -42,16 +42,17 @@ class Computer extends Model
     public function video_power()
     {
         $items = $this->items;
-        $isHdd = false;
+        $power = 0;
         foreach ($items as $item) {
+            print_r($item);
             if($item->hardware->hardware_type->type === 'Video Card') {
-                
+                dd($item->hardware->data);
                 break;
             }
         }
 
 
 
-        return $isHdd;
+        return $power;
     }
 }
