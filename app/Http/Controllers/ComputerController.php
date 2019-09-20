@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Computer;
 use App\HardwareType;
 use App\Item;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -56,8 +57,8 @@ class ComputerController extends Controller
             return redirect('computer/assembler/' . $id);
         }
 
-        $item = Item::find($item_id);
-        $data = json_decode($item->hardware->data, true);
+        $itemClass = Item::find($item_id);
+        $data = json_decode($itemClass->hardware->data, true);
         $hasItem = false;
 
         if(isset($data['depends']) && !empty($data['depends'])) {
@@ -70,9 +71,8 @@ class ComputerController extends Controller
         }
 
         if($hasItem || empty($data['depends'])){
-            $item->computer_id = $computer->id;
-            dd($item);
-            $item->save();
+            $itemClass->computer_id = $computer->id;
+            $itemClass->save();
         } else {
             $needed = HardwareType::find($data['depends'][0])->type;
             Session::flash('message', 'The computer needs a '.$needed.' first!');
@@ -106,5 +106,45 @@ class ComputerController extends Controller
         $computer->save();
 
         return redirect('/computers/');
+    }
+
+    public function byteminer()
+    {
+        if(!Session::get('computer_id')) return redirect('/computers');
+
+        $computer = Computer::find(Session::get('computer_id'));
+
+        return view('programs.byteminer')->with(['computer' => $computer]);
+    }
+
+    public function byteminer_start()
+    {
+        if(!Session::get('computer_id')) return redirect('/computers');
+
+        $computer = Computer::find(Session::get('computer_id'));
+        if($computer->mine_start_time === null) {
+            $computer->mine_start_time = Carbon::now()->getTimestamp();
+        } else {
+            $computer->mined_coins = (Carbon::now()->getTimestamp() - $computer->mine_start_time);
+            $computer->mine_start_time = null;
+        }
+
+        $computer->save();
+
+        return redirect('/programs/byteminer');
+    }
+
+    public function byteminer_collect()
+    {
+        if(!Session::get('computer_id')) return redirect('/computers');
+
+        $computer = Computer::find(Session::get('computer_id'));
+        if($computer->mined_coins > 0) {
+            $computer->byte_coins += $computer->mined_coins;
+            $computer->mined_coins = 0;
+        }
+
+        $computer->save();
+        return redirect('/programs/byteminer');
     }
 }

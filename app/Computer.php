@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Computer extends Model
@@ -25,34 +26,91 @@ class Computer extends Model
         return $this->hasMany(Item::class, 'computer_id', 'id');
     }
 
-    public function is_hdd()
+    public function uses_hdd()
     {
-        $items = $this->items;
-        $isHdd = false;
-        foreach ($items as $item) {
-            if($item->hardware->hardware_type->type === 'Hard Disk Drive') {
-                $isHdd = true;
-                break;
-            }
-        }
+        $items = Item::select('hardware_types.type')
+            ->leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
+            ->leftJoin('hardware_types', 'computer_hardware.hardware_type_id', '=', 'hardware_types.id')
+            ->where('computer_id', $this->id)
+            ->where('hardware_types.type', 'Hard Disk Drive')
+            ->first();
+        return ($items !== null);
+    }
 
-        return $isHdd;
+    public function storage_size()
+    {
+        $storage = Item::select('computer_hardware.data', 'hardware_types.type')
+            ->leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
+            ->leftJoin('hardware_types', 'computer_hardware.hardware_type_id', '=', 'hardware_types.id')
+            ->where('computer_id', $this->id)
+            ->where('hardware_types.type', 'Hard Disk Drive')
+            ->first();
+
+        return ($storage) ? json_decode($storage->data)->size : 0;
+    }
+
+    public function storage_speed()
+    {
+        $storage = Item::select('computer_hardware.data', 'hardware_types.type')
+            ->leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
+            ->leftJoin('hardware_types', 'computer_hardware.hardware_type_id', '=', 'hardware_types.id')
+            ->where('computer_id', $this->id)
+            ->where('hardware_types.type', 'Hard Disk Drive')
+            ->orWhere('hardware_types.type', 'Solid State Drive')
+            ->first();
+
+        return ($storage) ? json_decode($storage->data)->speed : 0;
     }
 
     public function video_power()
     {
-        $items = $this->items;
-        $power = 0;
-        foreach ($items as $item) {
-            print_r($item);
-            if($item->hardware->hardware_type->type === 'Video Card') {
-                dd($item->hardware->data);
-                break;
-            }
+        $video_card = Item::select('computer_hardware.data', 'hardware_types.type')
+            ->leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
+            ->leftJoin('hardware_types', 'computer_hardware.hardware_type_id', '=', 'hardware_types.id')
+            ->where('computer_id', $this->id)
+            ->where('hardware_types.type', 'Video Card')
+            ->first();
+        return ($video_card) ? json_decode($video_card->data)->power : 0;
+    }
+
+    public function ram_mine_capacity()
+    {
+        $rams = Item::select('computer_hardware.data', 'hardware_types.type')
+            ->leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
+            ->leftJoin('hardware_types', 'computer_hardware.hardware_type_id', '=', 'hardware_types.id')
+            ->where('computer_id', $this->id)
+            ->where('hardware_types.type', 'RAM')
+            ->get();
+
+        $totalSize = 0;
+        $str = '';
+
+        foreach ($rams as $ram) {
+            $totalSize += json_decode($ram->data)->size;
+
         }
 
+        if($totalSize === 0) return 0;
 
+        if($totalSize >= 1024) {
+            $str .= $totalSize / 1024 . 'GB';
+        } else {
+            $str .= $totalSize . 'MB';
+        }
 
-        return $power;
+        $current_mined = (Carbon::now()->getTimestamp() - $this->mine_start_time) * 8;
+        $percentage = round($current_mined / (($totalSize * 1024) / 100), 2);
+
+        if($current_mined >= 1024) {
+            $display_mined = round($current_mined / 1024, 2) . 'MB';
+        } else if($current_mined >= 1024*1024) {
+            $display_mined = round($current_mined / 1024 / 1024, 2) . 'GB';
+        } else {
+            $display_mined = $current_mined . 'B';
+        }
+
+        $str .= ' / '. $display_mined .' (' . ($percentage === 100) ? 'Full' : $percentage . ')';
+
+        return $str;
     }
 }

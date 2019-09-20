@@ -3,47 +3,36 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-xl-3 col-sm-6">
+            <div class="col-xl-4 col-sm-6 my-2">
                 <div class="card h-100">
                     <div class="card-body">
                         <div class="rotate">
                             <i class="fa fa-user fa-4x"></i>
                         </div>
-                        <h6 class="text-uppercase">{{ ($computer->is_hdd()) ? 'HDD' : 'SSD' }}</h6>
-                        <h1 class="display-4">{{ $computer->video_power() }}</h1>
+                        <h6 class="text-uppercase">{{ ($computer->uses_hdd()) ? 'HDD' : 'SSD' }}</h6>
+                        <h1 class="display-6">{{ $computer->storage_size() . 'GB' }}</h1>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-sm-6">
+            <div class="col-xl-4 col-sm-6 my-2">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="rotate">
+                            <i class="fa fa-user fa-4x"></i>
+                        </div>
+                        <h6 class="text-uppercase">Storage Speed</h6>
+                        <h1 class="display-6">{{ $computer->storage_speed() . 'MB/s' }}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-sm-6 my-2">
                 <div class="card h-100">
                     <div class="card-body">
                         <div class="rotate">
                             <i class="fa fa-list fa-4x"></i>
                         </div>
                         <h6 class="text-uppercase">Mining Power / hour</h6>
-                        <h1 class="display-4">{{ $computer->video_power() }}</h1>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-sm-6">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <div class="rotate">
-                            <i class="fa fa-twitter fa-4x"></i>
-                        </div>
-                        <h6 class="text-uppercase">Tweets</h6>
-                        <h1 class="display-4">125</h1>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-sm-6">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <div class="rotate">
-                            <i class="fa fa-share fa-4x"></i>
-                        </div>
-                        <h6 class="text-uppercase">Shares</h6>
-                        <h1 class="display-4">36</h1>
+                        <h1 class="display-5">{{ $computer->video_power() }}</h1>
                     </div>
                 </div>
             </div>

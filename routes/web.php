@@ -1,5 +1,8 @@
 <?php
 
+use \Illuminate\Support\Facades\Route;
+use \Illuminate\Support\Facades\Auth;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,6 +27,10 @@ Route::group(['middleware' => ['computer']], function () {
     Route::get('/computer/add-part/{id}/{item_id}', 'ComputerController@add_part')->name('computer.add-part');
     Route::get('/computer/remove-part/{id}/{item_id}', 'ComputerController@remove_part')->name('computer.remove-part');
 });
+
+Route::get('/programs/byteminer', 'ComputerController@byteminer')->name('programs.byteminer');
+Route::get('/programs/byteminer/mine', 'ComputerController@byteminer_start')->name('programs.byteminer.mine');
+Route::get('/programs/byteminer/collect', 'ComputerController@byteminer_collect')->name('programs.byteminer.collect');
 
 Route::get('/shop/buy/{id}', 'ShopController@purchase')->name('shop.buy');
 Route::get('/computers', 'ComputerController@index')->name('computers');

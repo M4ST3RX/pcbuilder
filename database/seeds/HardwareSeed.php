@@ -11,6 +11,9 @@ class HardwareSeed extends Seeder
      */
     public function run()
     {
+        // RAM size in MB
+        // HDD, SSD size in GB
+        // speed in MB/s
         $hardwares = [
             [
                 'hardware_type_id' => 1,
@@ -59,7 +62,8 @@ class HardwareSeed extends Seeder
                 'name' => 'RAM 1',
                 'price' => 10,
                 'data' => [
-                    'depends' => [6]
+                    'depends' => [6],
+                    'size' => 64
                 ]
             ],
             [
@@ -67,7 +71,8 @@ class HardwareSeed extends Seeder
                 'name' => 'RAM 2',
                 'price' => 100,
                 'data' => [
-                    'depends' => [6]
+                    'depends' => [6],
+                    'size' => 256
                 ]
             ],
             [
@@ -75,44 +80,63 @@ class HardwareSeed extends Seeder
                 'name' => 'RAM 3',
                 'price' => 1000,
                 'data' => [
-                    'depends' => [6]
+                    'depends' => [6],
+                    'size' => 1024
                 ]
             ],
             [
                 'hardware_type_id' => 4,
                 'name' => 'HDD 1',
                 'price' => 10,
-                'data' => []
+                'data' => [
+                    'size' => 512,
+                    'speed' => 25
+                ]
             ],
             [
                 'hardware_type_id' => 4,
                 'name' => 'HDD 2',
                 'price' => 100,
-                'data' => []
+                'data' => [
+                    'size' => 1024,
+                    'speed' => 75
+                ]
             ],
             [
                 'hardware_type_id' => 4,
                 'name' => 'HDD 3',
                 'price' => 1000,
-                'data' => []
+                'data' => [
+                    'size' => 3096,
+                    'speed' => 190
+                ]
             ],
             [
                 'hardware_type_id' => 5,
                 'name' => 'SSD 1',
                 'price' => 10,
-                'data' => []
+                'data' => [
+                    'size' => 64,
+                    'speed' => 90
+                ]
             ],
             [
                 'hardware_type_id' => 5,
                 'name' => 'SSD 2',
                 'price' => 100,
-                'data' => []
+                'data' => [
+                    'size' => 128,
+                    'speed' => 180
+                ]
             ],
             [
                 'hardware_type_id' => 5,
                 'name' => 'SSD 3',
                 'price' => 1000,
-                'data' => []
+                'data' => [
+                    'size' => 256,
+                    'speed' => 270
+                ]
             ],
             [
                 'hardware_type_id' => 6,
