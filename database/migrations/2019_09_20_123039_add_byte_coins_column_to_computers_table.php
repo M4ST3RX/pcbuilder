@@ -14,7 +14,7 @@ class AddByteCoinsColumnToComputersTable extends Migration
     public function up()
     {
         Schema::table('computers', function (Blueprint $table) {
-            $table->unsignedBigInteger('byte_coins')->default(0);
+            $table->float('byte_coins')->default(0);
         });
     }
 

@@ -73,6 +73,12 @@ class Computer extends Model
         return ($video_card) ? json_decode($video_card->data)->power : 0;
     }
 
+    public function current_mined_coins()
+    {
+        if($this->mine_start_time == null) return 0;
+        return round((Carbon::now()->getTimestamp() - $this->mine_start_time) / 60, 4);
+    }
+
     public function ram_mine_capacity()
     {
         $rams = Item::select('computer_hardware.data', 'hardware_types.type')
@@ -98,19 +104,40 @@ class Computer extends Model
             $str .= $totalSize . 'MB';
         }
 
-        $current_mined = (Carbon::now()->getTimestamp() - $this->mine_start_time) * 8;
-        $percentage = round($current_mined / (($totalSize * 1024) / 100), 2);
+        $current_mined_bytes = $this->current_mined_coins() * 8e4;
+        $percentage = round($current_mined_bytes / (($totalSize * 1024 * 1024) / 100), 2);
 
-        if($current_mined >= 1024) {
-            $display_mined = round($current_mined / 1024, 2) . 'MB';
-        } else if($current_mined >= 1024*1024) {
-            $display_mined = round($current_mined / 1024 / 1024, 2) . 'GB';
+
+        if($current_mined_bytes/1024/1024 >= 1024) {
+            $display_mined = round($current_mined_bytes / 1024 / 1024 / 1024, 2) . 'GB';
+        } else if($current_mined_bytes/1024 >= 1024) {
+            $display_mined = round($current_mined_bytes / 1024 / 1024, 2) . 'MB';
+        } else if($current_mined_bytes >= 1024){
+            $display_mined = round($current_mined_bytes / 1024, 2) . 'KB';
         } else {
-            $display_mined = $current_mined . 'B';
+            $display_mined = $current_mined_bytes . 'B';
         }
 
-        $str .= ' / '. $display_mined .' (' . ($percentage === 100) ? 'Full' : $percentage . ')';
+        $str .= ' / '. $display_mined . ' (' . (($percentage >= 100) ? 'Full' : $percentage . '%') . ')';
 
         return $str;
+    }
+
+    public function fully_functional()
+    {
+        $array = [];
+        $items = Item::select('hardware_types.type')
+            ->leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
+            ->leftJoin('hardware_types', 'computer_hardware.hardware_type_id', '=', 'hardware_types.id')
+            ->where('computer_id', $this->id)
+            ->get();
+
+        foreach ($items as $item) {
+            $array[] = $item->type;
+        }
+        
+        if((in_array('Hard Disk Drive', $array) || in_array('Solid State Drive', $array)) && in_array('Motherboard', $array)
+            && in_array('RAM', $array) && in_array('Video Card', $array) && in_array('CPU', $array)) return true;
+        return false;
     }
 }

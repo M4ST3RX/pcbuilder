@@ -19,7 +19,13 @@ class ComputerController extends Controller
 
     public function index()
     {
+        return redirect('/computers');
+    }
+
+    public function selector()
+    {
         $computers = Auth::user()->computers;
+        Session::forget('computer_id');
 
         return view('computer.select')->with(['computers' => $computers]);
     }
@@ -102,8 +108,14 @@ class ComputerController extends Controller
     public function set_state($computer_id)
     {
         $computer = Computer::find($computer_id);
-        $computer->state = !$computer->state;
-        $computer->save();
+        if($computer->fully_functional()){
+            $computer->mine_start_time = null;
+            $computer->state = !$computer->state;
+            $computer->save();
+        } else {
+            Session::flash('message', 'You are missing some parts from this computer!');
+            Session::flash('alert-class', 'alert-danger');
+        }
 
         return redirect('/computers/');
     }
@@ -125,7 +137,7 @@ class ComputerController extends Controller
         if($computer->mine_start_time === null) {
             $computer->mine_start_time = Carbon::now()->getTimestamp();
         } else {
-            $computer->mined_coins = (Carbon::now()->getTimestamp() - $computer->mine_start_time);
+            $computer->byte_coins += $computer->current_mined_coins();
             $computer->mine_start_time = null;
         }
 
@@ -139,9 +151,9 @@ class ComputerController extends Controller
         if(!Session::get('computer_id')) return redirect('/computers');
 
         $computer = Computer::find(Session::get('computer_id'));
-        if($computer->mined_coins > 0) {
-            $computer->byte_coins += $computer->mined_coins;
-            $computer->mined_coins = 0;
+        if($computer->mine_start_time) {
+            $computer->byte_coins += $computer->current_mined_coins();
+            $computer->mine_start_time = Carbon::now()->getTimestamp();
         }
 
         $computer->save();

@@ -33,7 +33,8 @@ Route::get('/programs/byteminer/mine', 'ComputerController@byteminer_start')->na
 Route::get('/programs/byteminer/collect', 'ComputerController@byteminer_collect')->name('programs.byteminer.collect');
 
 Route::get('/shop/buy/{id}', 'ShopController@purchase')->name('shop.buy');
-Route::get('/computers', 'ComputerController@index')->name('computers');
+Route::get('/computers', 'ComputerController@selector')->name('computers');
+Route::get('/home', 'ComputerController@index')->name('index');
 Route::get('/shop', 'ShopController@index')->name('shop');
 
 

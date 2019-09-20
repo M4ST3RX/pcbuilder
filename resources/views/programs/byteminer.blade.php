@@ -3,15 +3,15 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">ByteMiner</div>
 
                     <div class="card-body">
                         <p>Total ByteCoins: {{ $computer->byte_coins }}</p>
-                        <p>Mined ByteCoins: {{ $computer->byte_coins }}</p>
+                        <p>Mined ByteCoins: {{ $computer->current_mined_coins() }}</p>
                         <p>RAM capacity: {{ $computer->ram_mine_capacity() }}</p>
-                        <p>1 ByteCoin = 8 bytes </p>
+                        <p>0.0001 ByteCoin = 8 bytes </p>
                     </div>
                     <div class="card-footer">
                         <a href="{{ route('programs.byteminer.collect') }}" role="button" class="btn btn-success">Collect Coins</a>

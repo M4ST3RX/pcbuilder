@@ -34,6 +34,9 @@
                 <ul class="navbar-nav mr-auto">
                     @auth
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ route('computers') }}">{{ __('Selector') }}</a>
+                        </li>
+                        <li class="nav-item">
                             {{--<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>--}}
                                 {{--Shops <span class="caret"></span>--}}
                             {{--</a>--}}
@@ -52,14 +55,16 @@
 
                             {{--</div>--}}
                         </li>
-                        <li class="nav-item dropdown">
-                            <a id="programsDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ __('Programs') }} <span class="caret"></span>
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="programsDropdown">
-                                <a class="dropdown-item" href="{{ route('programs.byteminer') }}">{{ __('ByteMiner') }}</a>
-                            </div>
-                        </li>
+                        @if(\Illuminate\Support\Facades\Session::get('computer_id'))
+                            <li class="nav-item dropdown">
+                                <a id="programsDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ __('Programs') }} <span class="caret"></span>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="programsDropdown">
+                                    <a class="dropdown-item" href="{{ route('programs.byteminer') }}">{{ __('ByteMiner') }}</a>
+                                </div>
+                            </li>
+                        @endif
                     @endauth
                 </ul>
 
