@@ -18,7 +18,7 @@ class ShopController extends Controller
 
     public function index()
     {
-        $products = ComputerHardware::all();
+        $products = ComputerHardware::where('listed', true)->get();
 
         return view('shop.view')->with(['products' => $products]);
     }
@@ -27,6 +27,8 @@ class ShopController extends Controller
     {
         $product = ComputerHardware::find($id);
         $user = User::find(Auth::id());
+
+        if(!$product->listed) return redirect('/shop');
 
         if($user->money >= $product->price) {
             $user->money = $user->money - $product->price;

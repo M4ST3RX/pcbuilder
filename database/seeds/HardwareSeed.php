@@ -17,42 +17,54 @@ class HardwareSeed extends Seeder
         $hardwares = [
             [
                 'hardware_type_id' => 1,
-                'name' => 'Case 1',
-                'price' => 10,
+                'name' => 'PC Case',
+                'type' => 'case',
+                'brand' => 7,
+                'price' => 9,
                 'data' => []
             ],
             [
                 'hardware_type_id' => 1,
-                'name' => 'Case 2',
-                'price' => 100,
+                'name' => 'Modern Case',
+                'type' => 'case',
+                'brand' => 7,
+                'price' => 24,
                 'data' => []
             ],
             [
                 'hardware_type_id' => 1,
-                'name' => 'Case 2',
-                'price' => 1000,
+                'name' => 'Computer Case',
+                'type' => 'case',
+                'brand' => 8,
+                'price' => 63,
                 'data' => []
             ],
             [
                 'hardware_type_id' => 2,
-                'name' => 'CPU 1',
-                'price' => 10,
+                'name' => 'HD 1000',
+                'type' => 'cpu',
+                'brand' => 4,
+                'price' => 52,
                 'data' => [
                     'depends' => [6]
                 ]
             ],
             [
                 'hardware_type_id' => 2,
-                'name' => 'CPU 2',
-                'price' => 100,
+                'name' => 'Plasma JX-1',
+                'type' => 'cpu',
+                'brand' => 5,
+                'price' => 84,
                 'data' => [
                     'depends' => [6]
                 ]
             ],
             [
                 'hardware_type_id' => 2,
-                'name' => 'CPU 3',
-                'price' => 1000,
+                'name' => 'JTX-860',
+                'type' => 'cpu',
+                'brand' => 4,
+                'price' => 136,
                 'data' => [
                     'depends' => [6]
                 ]
@@ -60,127 +72,157 @@ class HardwareSeed extends Seeder
             [
                 'hardware_type_id' => 3,
                 'name' => 'RAM 1',
-                'price' => 10,
+                'type' => 'ram',
+                'brand' => 6,
+                'price' => 34,
+                'data' => [
+                    'depends' => [6],
+                    'size' => 16
+                ]
+            ],
+            [
+                'hardware_type_id' => 3,
+                'name' => 'RAM 2',
+                'type' => 'ram',
+                'brand' => 6,
+                'price' => 71,
+                'data' => [
+                    'depends' => [6],
+                    'size' => 32
+                ]
+            ],
+            [
+                'hardware_type_id' => 3,
+                'name' => 'NT-20',
+                'type' => 'ram',
+                'brand' => 6,
+                'price' => 93,
                 'data' => [
                     'depends' => [6],
                     'size' => 64
                 ]
             ],
             [
-                'hardware_type_id' => 3,
-                'name' => 'RAM 2',
-                'price' => 100,
-                'data' => [
-                    'depends' => [6],
-                    'size' => 256
-                ]
-            ],
-            [
-                'hardware_type_id' => 3,
-                'name' => 'RAM 3',
-                'price' => 1000,
-                'data' => [
-                    'depends' => [6],
-                    'size' => 1024
-                ]
-            ],
-            [
                 'hardware_type_id' => 4,
-                'name' => 'HDD 1',
-                'price' => 10,
+                'name' => 'Blue',
+                'type' => 'hdd',
+                'brand' => 2,
+                'price' => 24,
                 'data' => [
-                    'size' => 512,
+                    'size' => 128,
                     'speed' => 25
                 ]
             ],
             [
                 'hardware_type_id' => 4,
-                'name' => 'HDD 2',
-                'price' => 100,
+                'name' => 'Green',
+                'type' => 'hdd',
+                'brand' => 2,
+                'price' => 39,
                 'data' => [
-                    'size' => 1024,
+                    'size' => 256,
                     'speed' => 75
                 ]
             ],
             [
                 'hardware_type_id' => 4,
-                'name' => 'HDD 3',
-                'price' => 1000,
+                'name' => 'Red',
+                'type' => 'hdd',
+                'brand' => 2,
+                'price' => 60,
                 'data' => [
-                    'size' => 3096,
+                    'size' => 512,
                     'speed' => 190
                 ]
             ],
             [
                 'hardware_type_id' => 5,
                 'name' => 'SSD 1',
-                'price' => 10,
+                'type' => 'ssd',
+                'brand' => 3,
+                'price' => 67,
                 'data' => [
-                    'size' => 64,
+                    'size' => 32,
                     'speed' => 90
                 ]
             ],
             [
                 'hardware_type_id' => 5,
                 'name' => 'SSD 2',
-                'price' => 100,
+                'type' => 'ssd',
+                'brand' => 3,
+                'price' => 88,
                 'data' => [
-                    'size' => 128,
+                    'size' => 64,
                     'speed' => 180
                 ]
             ],
             [
                 'hardware_type_id' => 5,
                 'name' => 'SSD 3',
-                'price' => 1000,
+                'type' => 'ssd',
+                'brand' => 3,
+                'price' => 107,
                 'data' => [
-                    'size' => 256,
+                    'size' => 128,
                     'speed' => 270
                 ]
             ],
             [
                 'hardware_type_id' => 6,
-                'name' => 'MB 1',
-                'price' => 10,
+                'name' => 'NF-50',
+                'type' => 'motherboard',
+                'brand' => 12,
+                'price' => 40,
                 'data' => []
             ],
             [
                 'hardware_type_id' => 6,
-                'name' => 'MB 2',
-                'price' => 100,
+                'name' => 'NF-60',
+                'type' => 'motherboard',
+                'brand' => 12,
+                'price' => 172,
                 'data' => []
             ],
             [
                 'hardware_type_id' => 6,
-                'name' => 'MB 3',
-                'price' => 1000,
+                'name' => 'NF Pro',
+                'type' => 'motherboard',
+                'brand' => 12,
+                'price' => 149,
                 'data' => []
             ],
             [
                 'hardware_type_id' => 7,
-                'name' => 'Video Card 1',
-                'price' => 10,
+                'name' => 'V1',
+                'type' => 'videocard',
+                'brand' => 10,
+                'price' => 99,
                 'data' => [
                     'depends' => [6],
-                    'power' => 1
+                    'power' => 0.4
                 ]
             ],
             [
                 'hardware_type_id' => 7,
-                'name' => 'Video Card 2',
-                'price' => 100,
+                'name' => 'V1-G',
+                'type' => 'videocard',
+                'brand' => 10,
+                'price' => 155,
                 'data' => [
                     'depends' => [6],
-                    'power' => 4.6
+                    'power' => 1.2
                 ]
             ],
             [
                 'hardware_type_id' => 7,
-                'name' => 'Video Card 3',
-                'price' => 1000,
+                'name' => 'GG Gaming',
+                'type' => 'videocard',
+                'brand' => 9,
+                'price' => 259,
                 'data' => [
                     'depends' => [6],
-                    'power' => 17.2
+                    'power' => 2.8
                 ]
             ]
         ];
@@ -191,6 +233,8 @@ class HardwareSeed extends Seeder
             ],[
                 'hardware_type_id' => $hardware['hardware_type_id'],
                 'data' => json_encode($hardware['data']),
+                'type' => json_encode($hardware['type']),
+                'brand' => json_encode($hardware['brand']),
                 'price' => json_encode($hardware['price']),
             ]);
         }

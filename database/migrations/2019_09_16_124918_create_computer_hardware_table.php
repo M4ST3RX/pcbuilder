@@ -20,8 +20,6 @@ class CreateComputerHardwareTable extends Migration
             $table->string('name');
             $table->longText('data');
             $table->timestamps();
-
-            $table->foreign('hardware_type_id')->references('id')->on('hardware_types');
         });
     }
 

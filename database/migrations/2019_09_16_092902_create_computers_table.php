@@ -21,9 +21,6 @@ class CreateComputersTable extends Migration
             $table->longText('data');
             $table->boolean('state');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('brand')->references('id')->on('computer_brands');
         });
     }
 

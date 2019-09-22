@@ -18,7 +18,8 @@ class HardwareTypesSeed extends Seeder
             'Hard Disk Drive',
             'Solid State Drive',
             'Motherboard',
-            'Video Card'
+            'Video Card',
+            'Power Supply'
         ];
 
         foreach ($types as $type) {

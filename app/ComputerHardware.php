@@ -10,4 +10,9 @@ class ComputerHardware extends Model
     {
         return $this->belongsTo(HardwareType::class);
     }
+
+    public function item_brand()
+    {
+        return $this->belongsTo(ComputerBrand::class, 'brand', 'id');
+    }
 }

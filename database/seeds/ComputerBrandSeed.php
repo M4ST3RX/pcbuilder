@@ -13,21 +13,57 @@ class ComputerBrandSeed extends Seeder
     {
         $brands = [
             [
-                'name' => 'HP',
-                'slug' => 'hp'
+                'name' => 'MemoryGrid', //ram
+                'slug' => 'memory-grid'
             ],
             [
-                'name' => 'ASUS',
-                'slug' => 'asus'
+                'name' => 'OpticDrive', //hdd
+                'slug' => 'optic-drive'
             ],
             [
-                'name' => 'Lenovo',
-                'slug' => 'lenovo'
+                'name' => 'drivebyte', //ssd
+                'slug' => 'drivebyte'
+            ],
+            [
+                'name' => 'CHIPLUMO', //cpu
+                'slug' => 'chiplumo'
+            ],
+            [
+                'name' => 'Chipnetic', //cpu
+                'slug' => 'chipnetic'
+            ],
+            [
+                'name' => 'memorybay', //ram
+                'slug' => 'memorybay'
+            ],
+            [
+                'name' => 'TECHYX', //case
+                'slug' => 'techyx'
+            ],
+            [
+                'name' => 'MCOMPUTER', //case
+                'slug' => 'm-computer'
+            ],
+            [
+                'name' => 'gamegenix', //video card
+                'slug' => 'gamegenix'
+            ],
+            [
+                'name' => 'NETVISION', //video card
+                'slug' => 'netvision'
+            ],
+            [
+                'name' => 'POWERNOMIC', //power supply
+                'slug' => 'powernomic'
+            ],
+            [
+                'name' => 'computio', //motherboard
+                'slug' => 'computio'
             ]
         ];
 
         foreach ($brands as $brand) {
-            \App\ComputerBrand::firstOrCreate([
+            \App\ComputerBrand::updateOrCreate([
                 'name' => $brand['name']
             ],[
                 'slug' => $brand['slug']
