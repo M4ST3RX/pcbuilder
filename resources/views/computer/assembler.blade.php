@@ -14,16 +14,19 @@
                         <p class="card-text"></p>
                     </div>
                 </div>
-                <table class="table">
+                    <br />
+                <table class="table table-dark">
                     <thead>
                         <tr>
                             <th scope="col">Name</th>
+                            <th scope="col">Type</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
                     @foreach($items as $item)
                         <tr>
-                            <td>{{ $item->hardware->name }}</td>
+                            <td>{{ $item->hardware->item_brand->name . ' ' . $item->hardware->name }}</td>
+                            <td>{{ $item->hardware->hardware_type->type }}</td>
                             @if($item->computer_id)
                                 <td><a href="{{ route('computer.remove-part', ['id' => $computer->id, 'item_id' => $item->id]) }}" class="btn btn-danger" role="button">Remove</a></td>
                             @else
