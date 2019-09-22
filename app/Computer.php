@@ -76,7 +76,7 @@ class Computer extends Model
     public function current_mined_coins()
     {
         if($this->mine_start_time == null) return 0;
-        return round((Carbon::now()->getTimestamp() - $this->mine_start_time) / 60, 4);
+        return round((Carbon::now()->getTimestamp() - $this->mine_start_time) / 60 / 60, 4);
     }
 
     public function ram_mine_capacity()
