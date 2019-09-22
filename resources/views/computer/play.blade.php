@@ -10,7 +10,7 @@
                             <i class="fa fa-user fa-4x"></i>
                         </div>
                         <h6 class="text-uppercase">{{ ($computer->uses_hdd()) ? 'HDD' : 'SSD' }}</h6>
-                        <h1 class="display-6">{{ $computer->storage_size() . 'GB' }}</h1>
+                        <h1 class="display-6">{{ $computer->storage_size() }}</h1>
                     </div>
                 </div>
             </div>

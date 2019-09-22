@@ -233,8 +233,8 @@ class HardwareSeed extends Seeder
             ],[
                 'hardware_type_id' => $hardware['hardware_type_id'],
                 'data' => json_encode($hardware['data']),
-                'type' => json_encode($hardware['type']),
-                'brand' => json_encode($hardware['brand']),
+                'type' => $hardware['type'],
+                'brand' => $hardware['brand'],
                 'price' => json_encode($hardware['price']),
             ]);
         }

@@ -28,35 +28,31 @@ class Computer extends Model
 
     public function uses_hdd()
     {
-        $items = Item::select('hardware_types.type')
-            ->leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
-            ->leftJoin('hardware_types', 'computer_hardware.hardware_type_id', '=', 'hardware_types.id')
+        $items = Item::leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
             ->where('computer_id', $this->id)
-            ->where('hardware_types.type', 'Hard Disk Drive')
+            ->where('computer_hardware.type', 'hdd')
             ->first();
         return ($items !== null);
     }
 
     public function storage_size()
     {
-        $storage = Item::select('computer_hardware.data', 'hardware_types.type')
+        $storage = Item::select('computer_hardware.data')
             ->leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
-            ->leftJoin('hardware_types', 'computer_hardware.hardware_type_id', '=', 'hardware_types.id')
             ->where('computer_id', $this->id)
-            ->where('hardware_types.type', 'Hard Disk Drive')
+            ->where('computer_hardware.type', 'hdd')
             ->first();
 
-        return ($storage) ? json_decode($storage->data)->size : 0;
+        return ($storage) ? Util::formatSizeUnits(json_decode($storage->data)->size) : 0;
     }
 
     public function storage_speed()
     {
-        $storage = Item::select('computer_hardware.data', 'hardware_types.type')
+        $storage = Item::select('computer_hardware.data')
             ->leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
-            ->leftJoin('hardware_types', 'computer_hardware.hardware_type_id', '=', 'hardware_types.id')
             ->where('computer_id', $this->id)
-            ->where('hardware_types.type', 'Hard Disk Drive')
-            ->orWhere('hardware_types.type', 'Solid State Drive')
+            ->where('computer_hardware.type', 'hdd')
+            ->orWhere('computer_hardware.type', 'ssd')
             ->first();
 
         return ($storage) ? json_decode($storage->data)->speed : 0;
@@ -64,11 +60,10 @@ class Computer extends Model
 
     public function video_power()
     {
-        $video_card = Item::select('computer_hardware.data', 'hardware_types.type')
+        $video_card = Item::select('computer_hardware.data')
             ->leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
-            ->leftJoin('hardware_types', 'computer_hardware.hardware_type_id', '=', 'hardware_types.id')
             ->where('computer_id', $this->id)
-            ->where('hardware_types.type', 'Video Card')
+            ->where('computer_hardware.type', 'videocard')
             ->first();
         return ($video_card) ? json_decode($video_card->data)->power : 0;
     }
@@ -81,11 +76,10 @@ class Computer extends Model
 
     public function ram_mine_capacity()
     {
-        $rams = Item::select('computer_hardware.data', 'hardware_types.type')
+        $rams = Item::select('computer_hardware.data')
             ->leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
-            ->leftJoin('hardware_types', 'computer_hardware.hardware_type_id', '=', 'hardware_types.id')
             ->where('computer_id', $this->id)
-            ->where('hardware_types.type', 'RAM')
+            ->where('computer_hardware.type', 'ram')
             ->get();
 
         $totalSize = 0;
@@ -93,32 +87,16 @@ class Computer extends Model
 
         foreach ($rams as $ram) {
             $totalSize += json_decode($ram->data)->size;
-
         }
 
-        if($totalSize === 0) return 0;
+        if($totalSize === 0) return "0B";
 
-        if($totalSize >= 1024) {
-            $str .= $totalSize / 1024 . 'GB';
-        } else {
-            $str .= $totalSize . 'MB';
-        }
+        $str .= Util::formatSizeUnits($totalSize);
 
         $current_mined_bytes = $this->current_mined_coins() * 8e4;
         $percentage = round($current_mined_bytes / (($totalSize * 1024 * 1024) / 100), 2);
 
-
-        if($current_mined_bytes/1024/1024 >= 1024) {
-            $display_mined = round($current_mined_bytes / 1024 / 1024 / 1024, 2) . 'GB';
-        } else if($current_mined_bytes/1024 >= 1024) {
-            $display_mined = round($current_mined_bytes / 1024 / 1024, 2) . 'MB';
-        } else if($current_mined_bytes >= 1024){
-            $display_mined = round($current_mined_bytes / 1024, 2) . 'KB';
-        } else {
-            $display_mined = $current_mined_bytes . 'B';
-        }
-
-        $str .= ' / '. $display_mined . ' (' . (($percentage >= 100) ? 'Full' : $percentage . '%') . ')';
+        $str .= ' / '. Util::formatSizeUnits(Util::formatSize($current_mined_bytes, 'MB')) . ' (' . $percentage . '%)';
 
         return $str;
     }
