@@ -41,9 +41,14 @@ class Computer extends Model
             ->leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
             ->where('computer_id', $this->id)
             ->where('computer_hardware.type', 'hdd')
-            ->first();
+            ->get();
 
-        return ($storage) ? Util::formatSizeUnits(json_decode($storage->data)->size) : 0;
+        $totalSize = 0;
+        foreach ($storage as $item) {
+            $totalSize += json_decode($item->data)->size;
+        }
+
+        return ($storage) ? Util::formatSizeUnits($totalSize) : 0;
     }
 
     public function storage_speed()
@@ -65,13 +70,37 @@ class Computer extends Model
             ->where('computer_id', $this->id)
             ->where('computer_hardware.type', 'videocard')
             ->first();
-        return ($video_card) ? json_decode($video_card->data)->power : 0;
+        return ($video_card) ? Util::formatHertzUnits(json_decode($video_card->data)->speed) : 0;
     }
 
     public function current_mined_coins()
     {
         if($this->mine_start_time == null) return 0;
-        return round((Carbon::now()->getTimestamp() - $this->mine_start_time) / 60 / 60, 4);
+
+        $video_card = Item::select('computer_hardware.data')
+            ->leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
+            ->where('computer_id', $this->id)
+            ->where('computer_hardware.type', 'videocard')
+            ->first();
+
+        $coins = (Carbon::now()->getTimestamp() - $this->mine_start_time) / 360;
+        $bonus = (json_decode($video_card->data)->speed / 100) * $coins;
+        return round($coins + $bonus , 4);
+    }
+
+    public function mine_speed()
+    {
+        if($this->mine_start_time == null) return 0;
+
+        $video_card = Item::select('computer_hardware.data')
+            ->leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
+            ->where('computer_id', $this->id)
+            ->where('computer_hardware.type', 'videocard')
+            ->first();
+
+        $coins = 1;
+        $bonus = (json_decode($video_card->data)->speed / 100) * $coins;
+        return ($coins + $bonus) / 360 . ' ByteCoin / second';
     }
 
     public function ram_mine_capacity()
@@ -96,7 +125,7 @@ class Computer extends Model
         $current_mined_bytes = $this->current_mined_coins() * 8e4;
         $percentage = round($current_mined_bytes / (($totalSize * 1024 * 1024) / 100), 2);
 
-        $str .= ' / '. Util::formatSizeUnits(Util::formatSize($current_mined_bytes, 'MB')) . ' (' . $percentage . '%)';
+        $str .= ' / '. Util::formatSizeUnits($current_mined_bytes / 1024 / 1024) . ' (' . $percentage . '%)';
 
         return $str;
     }

@@ -9,7 +9,7 @@
                         <div class="rotate">
                             <i class="fa fa-user fa-4x"></i>
                         </div>
-                        <h6 class="text-uppercase">{{ ($computer->uses_hdd()) ? 'HDD' : 'SSD' }}</h6>
+                        <h6 class="text-uppercase">Storage Size</h6>
                         <h1 class="display-6">{{ $computer->storage_size() }}</h1>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                         <div class="rotate">
                             <i class="fa fa-list fa-4x"></i>
                         </div>
-                        <h6 class="text-uppercase">Mining Power / hour</h6>
+                        <h6 class="text-uppercase">GPU Speed</h6>
                         <h1 class="display-5">{{ $computer->video_power() }}</h1>
                     </div>
                 </div>

@@ -46,7 +46,8 @@ class HardwareSeed extends Seeder
                 'brand' => 4,
                 'price' => 52,
                 'data' => [
-                    'depends' => [6]
+                    'depends' => [6],
+                    'speed' => 6
                 ]
             ],
             [
@@ -56,7 +57,8 @@ class HardwareSeed extends Seeder
                 'brand' => 5,
                 'price' => 84,
                 'data' => [
-                    'depends' => [6]
+                    'depends' => [6],
+                    'speed' => 8
                 ]
             ],
             [
@@ -66,7 +68,8 @@ class HardwareSeed extends Seeder
                 'brand' => 4,
                 'price' => 136,
                 'data' => [
-                    'depends' => [6]
+                    'depends' => [6],
+                    'speed' => 14
                 ]
             ],
             [
@@ -200,7 +203,7 @@ class HardwareSeed extends Seeder
                 'price' => 99,
                 'data' => [
                     'depends' => [6],
-                    'power' => 0.4
+                    'speed' => 80
                 ]
             ],
             [
@@ -211,7 +214,7 @@ class HardwareSeed extends Seeder
                 'price' => 155,
                 'data' => [
                     'depends' => [6],
-                    'power' => 1.2
+                    'speed' => 100
                 ]
             ],
             [
@@ -222,7 +225,7 @@ class HardwareSeed extends Seeder
                 'price' => 259,
                 'data' => [
                     'depends' => [6],
-                    'power' => 2.8
+                    'speed' => 140
                 ]
             ]
         ];

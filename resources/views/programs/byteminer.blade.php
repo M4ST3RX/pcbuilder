@@ -10,6 +10,7 @@
                     <div class="card-body">
                         <p>Total ByteCoins: {{ $computer->byte_coins }}</p>
                         <p>Mined ByteCoins: {{ $computer->current_mined_coins() }}</p>
+                        <p>Mine Speed: {{ $computer->mine_speed() }}</p>
                         <p>RAM capacity: {{ $computer->ram_mine_capacity() }}</p>
                         <p>0.0001 ByteCoin = 8 bytes </p>
                     </div>
