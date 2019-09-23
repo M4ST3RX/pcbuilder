@@ -83,7 +83,7 @@ class Computer extends Model
             ->where('computer_hardware.type', 'videocard')
             ->first();
 
-        $coins = (Carbon::now()->getTimestamp() - $this->mine_start_time) / 360;
+        $coins = (Carbon::now()->getTimestamp() - $this->mine_start_time) / 1e4;
         $bonus = (json_decode($video_card->data)->speed / 100) * $coins;
         return round($coins + $bonus , 4);
     }
@@ -100,7 +100,7 @@ class Computer extends Model
 
         $coins = 1;
         $bonus = (json_decode($video_card->data)->speed / 100) * $coins;
-        return ($coins + $bonus) / 360 . ' ByteCoin / second';
+        return ($coins + $bonus) / 1e4 . ' ByteCoin / second';
     }
 
     public function ram_mine_capacity()
