@@ -83,7 +83,8 @@ class Computer extends Model
             ->where('computer_hardware.type', 'videocard')
             ->first();
 
-        $coins = (Carbon::now()->getTimestamp() - $this->mine_start_time) / 1e5;
+        // 604800 = 1 week
+        $coins = (Carbon::now()->getTimestamp() - $this->mine_start_time) / 604800;
         $bonus = (json_decode($video_card->data)->speed / 100) * $coins;
         return round($coins + $bonus , 4);
     }
@@ -122,7 +123,7 @@ class Computer extends Model
 
         $str .= Util::formatSizeUnits($totalSize);
 
-        $current_mined_bytes = $this->current_mined_coins() * 8e6;
+        $current_mined_bytes = $this->current_mined_coins() * (1048576 * 8);
         $percentage = round($current_mined_bytes / (($totalSize * 1024 * 1024) / 100), 2);
 
         $str .= ' / '. Util::formatSizeUnits($current_mined_bytes / 1024 / 1024) . ' (' . $percentage . '%)';
