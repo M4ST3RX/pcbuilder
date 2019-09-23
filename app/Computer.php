@@ -122,7 +122,7 @@ class Computer extends Model
 
         $str .= Util::formatSizeUnits($totalSize);
 
-        $current_mined_bytes = $this->current_mined_coins() * 8e5;
+        $current_mined_bytes = $this->current_mined_coins() * 8e6;
         $percentage = round($current_mined_bytes / (($totalSize * 1024 * 1024) / 100), 2);
 
         $str .= ' / '. Util::formatSizeUnits($current_mined_bytes / 1024 / 1024) . ' (' . $percentage . '%)';
