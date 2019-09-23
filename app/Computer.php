@@ -83,10 +83,10 @@ class Computer extends Model
             ->where('computer_hardware.type', 'videocard')
             ->first();
 
-        // 604800 = 1 week
-        $coins = (Carbon::now()->getTimestamp() - $this->mine_start_time) / 604800;
+        $diff = Carbon::now()->getTimestamp() - $this->mine_start_time;
+        $coins = ($diff / 60) * 0.00001;
         $bonus = (json_decode($video_card->data)->speed / 100) * $coins;
-        return round($coins + $bonus , 4);
+        return number_format(round(($coins + $bonus), 5), 5);
     }
 
     public function mine_speed()
@@ -99,9 +99,9 @@ class Computer extends Model
             ->where('computer_hardware.type', 'videocard')
             ->first();
 
-        $coins = 1;
+        $coins = 0.00001;
         $bonus = (json_decode($video_card->data)->speed / 100) * $coins;
-        return ($coins + $bonus) / 1e4 . ' ByteCoin / second';
+        return number_format(round(($coins + $bonus), 5), 5) . ' ByteCoin / minute';
     }
 
     public function ram_mine_capacity()
@@ -123,8 +123,8 @@ class Computer extends Model
 
         $str .= Util::formatSizeUnits($totalSize);
 
-        $current_mined_bytes = $this->current_mined_coins() * (1048576 * 80);
-        $percentage = round($current_mined_bytes / (($totalSize * 1024 * 1024) / 100), 2);
+        $current_mined_bytes = (Carbon::now()->getTimestamp() - $this->mine_start_time) * 1024;
+        $percentage = round($current_mined_bytes / ((Util::formatSize($totalSize, 'B')) / 100), 2);
 
         $str .= ' / '. Util::formatSizeUnits($current_mined_bytes / 1024 / 1024) . ' (' . $percentage . '%)';
 

@@ -14,7 +14,7 @@ class AddByteCoinsColumnToComputersTable extends Migration
     public function up()
     {
         Schema::table('computers', function (Blueprint $table) {
-            $table->float('byte_coins')->default(0);
+            $table->float('byte_coins', 8, 5)->default(0);
         });
     }
 

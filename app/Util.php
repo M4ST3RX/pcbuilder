@@ -53,6 +53,9 @@ class Util extends Model
         elseif ($bytes >= 1024)
         {
             $bytes = round($bytes / 1024, 2) . ' KB';
+        } else
+        {
+            $bytes = $bytes . ' B';
         }
 
         return $bytes;
