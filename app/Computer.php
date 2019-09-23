@@ -108,7 +108,7 @@ class Computer extends Model
 
         $coins = 0.00001;
         $bonus = 0; //(json_decode($video_card->data)->speed / 100) * $coins;
-        return number_format(round($coins + $bonus, 5), 5) . ' ByteCoin / minute';
+        return sprintf('%.5f', intval(($coins*100000))/100000) . ' ByteCoin / minute';
     }
 
     public function ram_capacity()
