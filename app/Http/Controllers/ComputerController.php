@@ -153,23 +153,7 @@ class ComputerController extends Controller
 
         $computer = Computer::find(Session::get('computer_id'));
         if($computer->mine_start_time) {
-            $video_card = Item::select('computer_hardware.data')
-                ->leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
-                ->where('computer_id', $computer->id)
-                ->where('computer_hardware.type', 'videocard')
-                ->first();
-
-            $totalSize = Util::formatSize($computer->ram_capacity(), 'B');
-            $diff = Carbon::now()->getTimestamp() - $computer->mine_start_time;
-
-            if($totalSize - $diff * 1024 <= 0) {
-                $coins = ($totalSize / 60) * 0.00001;
-                $bonus = (json_decode($video_card->data)->speed / 100) * $coins;
-                $computer->byte_coins += $coins + $bonus;
-            } else {
-                $computer->byte_coins += $computer->current_mined_coins();
-            }
-
+            $computer->byte_coins += $computer->current_mined_coins();
             $computer->mine_start_time = Carbon::now()->getTimestamp();
             $computer->save();
         }
