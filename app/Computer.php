@@ -83,7 +83,7 @@ class Computer extends Model
             ->where('computer_hardware.type', 'videocard')
             ->first();
 
-        $coins = (Carbon::now()->getTimestamp() - $this->mine_start_time) / 1e4;
+        $coins = (Carbon::now()->getTimestamp() - $this->mine_start_time) / 1e5;
         $bonus = (json_decode($video_card->data)->speed / 100) * $coins;
         return round($coins + $bonus , 4);
     }
@@ -142,7 +142,7 @@ class Computer extends Model
         foreach ($items as $item) {
             $array[] = $item->type;
         }
-        
+
         if((in_array('Hard Disk Drive', $array) || in_array('Solid State Drive', $array)) && in_array('Motherboard', $array)
             && in_array('RAM', $array) && in_array('Video Card', $array) && in_array('CPU', $array)) return true;
         return false;
