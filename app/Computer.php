@@ -83,15 +83,17 @@ class Computer extends Model
             ->where('computer_hardware.type', 'videocard')
             ->first();
 
-        $diff = Carbon::now()->getTimestamp() - $this->mine_start_time;
-        if($diff <= 0) {
-            $coins = ($this->ram_capacity() / 60) * 0.00001;
-        } else {
-            $coins = ($diff / 60) * 0.00001;
-        }
-        $bonus = (json_decode($video_card->data)->speed / 100) * $coins;
+        $diff = (Carbon::now()->getTimestamp() - $this->mine_start_time);
 
-        return number_format(round(($coins + $bonus), 5), 5);
+        //dd($diff / 60);
+        /*if(Util::formatSize($this->ram_capacity(), 'B') <= $diff) {
+            $coins = (Util::formatSize($this->ram_capacity(), 'B') / 60) * 0.00001;
+        } else {*/
+            $coins = ($diff / 60) * 0.00001;
+        //}
+        $bonus = 0; //(json_decode($video_card->data)->speed / 100) * $coins;
+
+        return sprintf('%.5f', intval(($coins*100000))/100000);
     }
 
     public function mine_speed()
@@ -105,8 +107,8 @@ class Computer extends Model
             ->first();
 
         $coins = 0.00001;
-        $bonus = (json_decode($video_card->data)->speed / 100) * $coins;
-        return number_format(round(($coins + $bonus), 5), 5) . ' ByteCoin / minute';
+        $bonus = 0; //(json_decode($video_card->data)->speed / 100) * $coins;
+        return number_format(round($coins + $bonus, 5), 5) . ' ByteCoin / minute';
     }
 
     public function ram_capacity()
@@ -128,25 +130,17 @@ class Computer extends Model
     public function ram_mine_capacity()
     {
         $ram_size = $this->ram_capacity();
-        $video_card = Item::select('computer_hardware.data')
-            ->leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
-            ->where('computer_id', $this->id)
-            ->where('computer_hardware.type', 'videocard')
-            ->first();
-
         $str = '';
         if($ram_size === 0) return "0B";
 
         $str .= Util::formatSizeUnits($ram_size);
-        $diff = Carbon::now()->getTimestamp() - $this->mine_start_time;
+        $diff = $this->current_mined_coins();
 
-        if(Util::formatSize($this->ram_capacity(), 'B') < $diff * 1024) {
-            $coins = (Util::formatSize($this->ram_capacity(), 'B') / 60) * 0.00001;
-            $bonus = (json_decode($video_card->data)->speed / 100) * $coins;
-            $current_mined_bytes = $coins + $bonus;
-        } else {
-            $current_mined_bytes = $diff * 1024;
-        }
+        /*if(Util::formatSize($this->ram_capacity(), 'B') < $diff) {
+            $current_mined_bytes = Util::formatSize($this->ram_capacity(), 'B');
+        } else {*/
+            $current_mined_bytes = round($diff * 100000 * 1024, 2);
+        //}
         $percentage = round($current_mined_bytes / ((Util::formatSize($ram_size, 'B')) / 100), 2);
 
         $str .= ' / '. Util::formatSizeUnits($current_mined_bytes / 1024 / 1024) . ' (' . $percentage . '%)';
