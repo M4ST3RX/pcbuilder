@@ -58,7 +58,7 @@ class ByteMinerController extends Controller
 
         $computer = Computer::find(Session::get('computer_id'));
         $user = User::find(Auth::id());
-        $money = $computer->byte_coins * 381;
+        $money = round($computer->byte_coins * 38100, 0, PHP_ROUND_HALF_DOWN);
 
         $user->money += $money;
         $computer->byte_coins = 0;

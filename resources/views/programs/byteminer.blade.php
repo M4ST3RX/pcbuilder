@@ -8,7 +8,7 @@
                     <div class="card-header">ByteMiner</div>
 
                     <div class="card-body">
-                        <p>Total ByteCoins: {{ $computer->byte_coins }} <a style="margin-left: 10px" href="{{ route('programs.byteminer.sell') }}" role="button" class="btn btn-sm btn-primary">Sell All</a></p>
+                        <p>Total ByteCoins: {{ $computer->byte_coins }} <a style="margin-left: 10px" href="{{ route('programs.byteminer.sell') }}" role="button" class="btn btn-sm btn-primary">Sell - ${{ number_format($computer->byte_coins * 381, 2, '.', ' ') }}</a></p>
                         <p>Mined ByteCoins: {{ $computer->current_mined_coins() }}</p>
                         <p>Mine Speed: {{ $computer->mine_speed() }}</p>
                         <p>RAM capacity: {{ $computer->ram_mine_capacity() }}</p>
