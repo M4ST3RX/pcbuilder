@@ -61,6 +61,12 @@ class ByteMinerController extends Controller
 
         $user = User::find(Auth::id());
         $money = round(($user->bytecoin * 38100) / 100000, 0, PHP_ROUND_HALF_DOWN);
+
+        if($money < 100) {
+            Session::flash('message', 'A minimum of $1 is needed to sell your ByteCoins.');
+            Session::flash('alert-class', 'alert-danger');
+            return redirect('/programs/byteminer');
+        }
         $user->money += $money;
         $user->bytecoin = 0;
         $user->save();
