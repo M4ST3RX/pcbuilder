@@ -85,8 +85,8 @@ class Computer extends Model
 
         $diff = Carbon::now()->getTimestamp() - $this->mine_start_time;
 
-        if(Util::formatSize($this->ram_capacity(), 'B') <= $diff) {
-            $coins = (Util::formatSize($this->ram_capacity(), 'B') / 60) * 0.00001;
+        if(Util::formatSize($this->ram_capacity(), 'B') <= $diff / 20 * 1024 * 10) {
+            $coins = Util::formatSize($this->ram_capacity(), 'B') * 20 / 1024 / 10 / 60 * 0.00001;
         } else {
             $coins = ($diff / 60) * 0.00001;
         }
@@ -135,7 +135,7 @@ class Computer extends Model
         $str .= Util::formatSizeUnits($ram_size);
         $diff = Carbon::now()->getTimestamp() - $this->mine_start_time;
 
-        if(Util::formatSize($this->ram_capacity(), 'B') < $diff) {
+        if(Util::formatSize($this->ram_capacity(), 'B') < $diff / 20 * 1024 * 10) {
             $current_mined_bytes = Util::formatSize($this->ram_capacity(), 'B');
         } else {
             $current_mined_bytes = round($diff / 20 * 1024 * 10, 2);
