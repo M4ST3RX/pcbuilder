@@ -14,10 +14,7 @@
                         <p>RAM capacity: {{ $computer->ram_mine_capacity() }}</p>
                         <p>0.0001 ByteCoin = 3096 bytes</p>
                     </div>
-                    <div class="card-footer">
-                        <a href="{{ route('programs.byteminer.collect') }}" role="button" class="btn btn-success">Collect Coins</a>
-                        <a href="{{ route('programs.byteminer.mine') }}" role="button" class="btn btn-{{ ($computer->mine_start_time) ? 'danger' : 'primary' }}">{{ ($computer->mine_start_time) ? 'Stop Mining' : 'Mine Coins' }}</a>
-                    </div>
+                    
                 </div>
             </div>
         </div>
