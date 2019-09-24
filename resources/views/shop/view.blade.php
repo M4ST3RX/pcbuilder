@@ -1,7 +1,29 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div class="d-flex col-md-8 offset-md-2">
+        <div class="row mr-3" style="height: fit-content;">
+            <div class="card p-2">
+                <div class="card-body d-flex flex-column">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" value="">Option 1
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" value="">Option 2
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" value="" disabled>Option 3
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             @if(count($products) > 0)
                 @foreach($products as $product)
