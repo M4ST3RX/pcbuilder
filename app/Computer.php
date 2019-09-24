@@ -85,14 +85,15 @@ class Computer extends Model
 
         $diff = Carbon::now()->getTimestamp() - $this->mine_start_time;
 
-        if(Util::formatSize($this->ram_capacity(), 'B') <= $diff / 20 * 1024 * 10) {
-            $coins = Util::formatSize($this->ram_capacity(), 'B') * 20 / 1024 / 10 / 60 * 0.00001;
-        } else {
-            $coins = ($diff / 60) * 0.00001;
-        }
+        $coins = round($diff / 60, 0, PHP_ROUND_HALF_DOWN);
+//        if(Util::formatSize($this->ram_capacity(), 'B') <= $coins * 4096) {
+//            $coins = Util::formatSize($this->ram_capacity(), 'B') * 20 / 1024 / 10 / 60 * 0.00001;
+//        }
+
         $bonus = (json_decode($video_card->data)->speed / 100) * $coins;
 
-        return sprintf('%.5f', intval(($coins + $bonus)*100000)/100000);
+        return round($coins + $bonus, 0);
+//        return sprintf('%.5f', intval(($coins + $bonus)*100000)/100000);
     }
 
     public function mine_speed()
@@ -105,9 +106,9 @@ class Computer extends Model
             ->where('computer_hardware.type', 'videocard')
             ->first();
 
-        $coins = 0.00001;
+        $coins = 1;
         $bonus = json_decode($video_card->data)->speed / 100 * $coins;
-        return sprintf('%.5f', intval(($coins + $bonus)*100000)/100000) . ' ByteCoin / minute';
+        return $coins + $bonus;
     }
 
     public function ram_capacity()
@@ -133,12 +134,11 @@ class Computer extends Model
         if($ram_size === 0) return "0B";
 
         $str .= Util::formatSizeUnits($ram_size);
-        $diff = Carbon::now()->getTimestamp() - $this->mine_start_time;
 
-        if(Util::formatSize($this->ram_capacity(), 'B') < $diff / 20 * 1024 * 10) {
+        if(Util::formatSize($this->ram_capacity(), 'B') < $this->current_mined_coins() * 4096) {
             $current_mined_bytes = Util::formatSize($this->ram_capacity(), 'B');
         } else {
-            $current_mined_bytes = round($diff / 20 * 1024 * 10, 2);
+            $current_mined_bytes = $this->current_mined_coins() * 4096;
         }
         $percentage = round($current_mined_bytes * 100 / Util::formatSize($ram_size, 'B'), 2);
 

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Computer;
-use App\Settins;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -26,13 +25,15 @@ class ByteMinerController extends Controller
         if(!Session::get('computer_id')) return redirect('/computers');
 
         $computer = Computer::find(Session::get('computer_id'));
+        $user = User::find(Auth::id());
         if($computer->mine_start_time === null) {
             $computer->mine_start_time = Carbon::now()->getTimestamp();
         } else {
-            $computer->byte_coins += $computer->current_mined_coins();
+            $user->bytecoin += $computer->current_mined_coins();
             $computer->mine_start_time = null;
         }
 
+        $user->save();
         $computer->save();
 
         return redirect('/programs/byteminer');
@@ -43,10 +44,12 @@ class ByteMinerController extends Controller
         if(!Session::get('computer_id')) return redirect('/computers');
 
         $computer = Computer::find(Session::get('computer_id'));
+        $user = User::find(Auth::id());
         if($computer->mine_start_time) {
-            $computer->byte_coins += $computer->current_mined_coins();
+            $user->bytecoin += $computer->current_mined_coins();
             $computer->mine_start_time = Carbon::now()->getTimestamp();
             $computer->save();
+            $user->save();
         }
 
         return redirect('/programs/byteminer');
@@ -56,15 +59,11 @@ class ByteMinerController extends Controller
     {
         if(!Session::get('computer_id')) return redirect('/computers');
 
-        $computer = Computer::find(Session::get('computer_id'));
         $user = User::find(Auth::id());
-        $money = round($computer->byte_coins * 38100, 0, PHP_ROUND_HALF_DOWN);
-
+        $money = round(($user->bytecoin * 38100) / 100000, 0, PHP_ROUND_HALF_DOWN);
         $user->money += $money;
-        $computer->byte_coins = 0;
-
+        $user->bytecoin = 0;
         $user->save();
-        $computer->save();
 
         return redirect('/programs/byteminer');
     }
