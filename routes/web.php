@@ -25,9 +25,10 @@ Route::group(['middleware' => ['computer']], function () {
     Route::get('/computer/remove-part/{id}/{item_id}', 'ComputerController@remove_part')->name('computer.remove-part');
 });
 
-Route::get('/programs/byteminer', 'ComputerController@byteminer')->name('programs.byteminer');
-Route::get('/programs/byteminer/mine', 'ComputerController@byteminer_start')->name('programs.byteminer.mine');
-Route::get('/programs/byteminer/collect', 'ComputerController@byteminer_collect')->name('programs.byteminer.collect');
+Route::get('/programs/byteminer', 'ByteMinerController@byteminer')->name('programs.byteminer');
+Route::get('/programs/byteminer/mine', 'ByteMinerController@byteminer_start')->name('programs.byteminer.mine');
+Route::get('/programs/byteminer/collect', 'ByteMinerController@byteminer_collect')->name('programs.byteminer.collect');
+Route::get('/programs/byteminer/sell', 'ByteMinerController@sell')->name('programs.byteminer.sell');
 
 Route::get('/shop/buy/{id}', 'ShopController@purchase')->name('shop.buy');
 Route::get('/computers', 'ComputerController@selector')->name('computers');
