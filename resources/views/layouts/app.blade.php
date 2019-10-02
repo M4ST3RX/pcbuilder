@@ -34,7 +34,7 @@
                 <ul class="navbar-nav mr-auto">
                     @auth
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('computers') }}">{{ __('Selector') }}</a>
+                            <a class="nav-link" href="{{ route('computers') }}">{{ __('Warehouse') }}</a>
                         </li>
                         <li class="nav-item">
                             {{--<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>--}}
@@ -63,6 +63,9 @@
                                 <div class="dropdown-menu" aria-labelledby="programsDropdown">
                                     <a class="dropdown-item" href="{{ route('programs.byteminer') }}">{{ __('ByteMiner') }}</a>
                                 </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('company') }}">{{ __('Company') }}</a>
                             </li>
                         @endif
                     @endauth

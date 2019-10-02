@@ -14,5 +14,6 @@ class DatabaseSeeder extends Seeder
         $this->call(HardwareTypesSeed::class);
         $this->call(HardwareSeed::class);
         $this->call(ComputerBrandSeed::class);
+        $this->call(CompanyTypeSeeder::class);
     }
 }
