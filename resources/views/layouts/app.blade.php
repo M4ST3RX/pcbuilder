@@ -85,7 +85,7 @@
                         @endif
                     @else
                         <li class="nav-item">
-                            <a class="nav-link" style="cursor: default">${{ number_format(Auth::user()->money / 100, 2, '.', ' ') }}</a>
+                            <a class="nav-link" style="cursor: default">${{ number_format($player->money / 100, 2, '.', ' ') }}</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
