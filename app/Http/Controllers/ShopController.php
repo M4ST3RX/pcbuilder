@@ -27,7 +27,7 @@ class ShopController extends Controller
     public function purchase($id)
     {
         $product = ComputerHardware::find($id);
-        $user = Player::where('player_id', Auth::id())->first();
+        $user = Player::where('user_id', Auth::id())->first();
 
         if(!$product->listed) return redirect('/shop');
 

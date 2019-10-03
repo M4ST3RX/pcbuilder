@@ -23,7 +23,7 @@ class ComputerController extends Controller
 
     public function selector()
     {
-        $player = Player::where('player_id', Auth::id())->first();
+        $player = Player::where('user_id', Auth::id())->first();
         $computers = $player->computers;
         Session::forget('computer_id');
 
@@ -46,7 +46,7 @@ class ComputerController extends Controller
 
     public function assembler($id)
     {
-        $player = Player::where('player_id', Auth::id())->first();
+        $player = Player::where('user_id', Auth::id())->first();
         $computer = Computer::find($id);
         if($computer->user_id !== $player->id) return redirect()->back();
 
