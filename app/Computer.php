@@ -87,7 +87,7 @@ class Computer extends Model
 
         $coins = round($diff / 60, 0, PHP_ROUND_HALF_DOWN);
         if(Util::formatSize($this->ram_capacity(), 'B') <= $coins * 4096) {
-            $coins = Util::formatSize($this->ram_capacity(), 'B') * 4096;
+            $coins = Util::formatSize($this->ram_capacity(), 'B') / 4096;
         }
 
         $bonus = (json_decode($video_card->data)->speed / 100) * $coins;
