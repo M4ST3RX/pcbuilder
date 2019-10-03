@@ -27,6 +27,8 @@ class ComputerController extends Controller
         $computers = $player->computers;
         Session::forget('computer_id');
 
+        dd($computers);
+
         return view('computer.select')->with(['computers' => $computers]);
     }
 

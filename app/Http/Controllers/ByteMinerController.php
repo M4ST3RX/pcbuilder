@@ -66,7 +66,7 @@ class ByteMinerController extends Controller
         if(!Session::get('computer_id')) return redirect('/computers');
 
         $user = Player::where('user_id', Auth::id())->first();
-        $money = round(($user->bytecoin * 38100) / 100000, 0, PHP_ROUND_HALF_DOWN);
+        $money = round(($user->bytecoin * 38100) / 1e5, 0, PHP_ROUND_HALF_DOWN);
 
         if($money < 100) {
             Session::flash('message', 'A minimum of $1 is needed to sell your ByteCoins.');
