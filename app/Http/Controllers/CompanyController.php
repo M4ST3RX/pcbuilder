@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Auth;
 
 class CompanyController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         $player = Player::where('user_id', Auth::id())->first();
