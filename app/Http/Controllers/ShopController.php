@@ -15,10 +15,10 @@ class ShopController extends Controller
 {
     public function __construct()
     {
-        $player = Player::where('user_id', Auth::id())->first();
-
-        View::share('player', $player);
         $this->middleware('auth');
+
+        $player = Player::where('user_id', Auth::id())->first();
+        View::share('player', $player);
     }
 
     public function index()

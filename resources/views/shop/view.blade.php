@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+{{--@php--}}
+    {{--$player = \App\Player::where('user_id', \Illuminate\Support\Facades\Auth::id())->first();--}}
+{{--@endphp--}}
+
 @section('content')
     <div class="d-flex col-md-8 offset-md-2">
         <div class="row mr-3" style="height: fit-content;">
