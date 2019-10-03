@@ -15,6 +15,10 @@ class CreatePlayersTable extends Migration
     {
         Schema::create('players', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('bytecoin')->default(0);
+            $table->unsignedBigInteger('money')->default(500);
+            $table->unsignedBigInteger('company_id')->nullable();
             $table->timestamps();
         });
     }

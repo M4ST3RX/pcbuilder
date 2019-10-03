@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Computer;
+use App\Player;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ class ByteMinerController extends Controller
         if(!Session::get('computer_id')) return redirect('/computers');
 
         $computer = Computer::find(Session::get('computer_id'));
-        $user = User::find(Auth::id());
+        $user = Player::where('player_id', Auth::id())->first();
         if($computer->mine_start_time === null) {
             $computer->mine_start_time = Carbon::now()->getTimestamp();
         } else {
@@ -44,7 +45,7 @@ class ByteMinerController extends Controller
         if(!Session::get('computer_id')) return redirect('/computers');
 
         $computer = Computer::find(Session::get('computer_id'));
-        $user = User::find(Auth::id());
+        $user = Player::where('player_id', Auth::id())->first();
         if($computer->mine_start_time) {
             $user->bytecoin += $computer->current_mined_coins();
             $computer->mine_start_time = Carbon::now()->getTimestamp();
@@ -59,7 +60,7 @@ class ByteMinerController extends Controller
     {
         if(!Session::get('computer_id')) return redirect('/computers');
 
-        $user = User::find(Auth::id());
+        $user = Player::where('player_id', Auth::id())->first();
         $money = round(($user->bytecoin * 38100) / 100000, 0, PHP_ROUND_HALF_DOWN);
 
         if($money < 100) {

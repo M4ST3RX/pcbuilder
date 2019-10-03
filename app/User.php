@@ -38,8 +38,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function computers()
+    public function player()
     {
-        return $this->hasMany(Computer::class);
+        return $this->belongsTo(Player::class, 'id', 'user_id');
     }
 }

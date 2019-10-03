@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Computer;
 use App\ComputerHardware;
 use App\Item;
+use App\Player;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,7 @@ class ShopController extends Controller
     public function purchase($id)
     {
         $product = ComputerHardware::find($id);
-        $user = User::find(Auth::id());
+        $user = Player::where('player_id', Auth::id())->first();
 
         if(!$product->listed) return redirect('/shop');
 

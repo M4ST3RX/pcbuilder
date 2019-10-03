@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Computer;
 use App\HardwareType;
 use App\Item;
+use App\Player;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
@@ -22,7 +23,7 @@ class ComputerController extends Controller
 
     public function selector()
     {
-        $computers = Auth::user()->computers;
+        $computers = Auth::user()->player->computers;
         Session::forget('computer_id');
 
         return view('computer.select')->with(['computers' => $computers]);
@@ -45,9 +46,9 @@ class ComputerController extends Controller
     public function assembler($id)
     {
         $computer = Computer::find($id);
-        if($computer->user_id !== Auth::id()) return redirect()->back();
+        if($computer->user_id !== Auth::user()->player->id) return redirect()->back();
 
-        $items = Item::where('user_id', Auth::id())->where('computer_id', null)->orWhere('computer_id', $computer->id)->get();
+        $items = Item::where('user_id', Auth::user()->player->id)->where('computer_id', null)->orWhere('computer_id', $computer->id)->get();
 
         return view('computer.assembler')->with(['items' => $items, 'computer' => $computer]);
     }
