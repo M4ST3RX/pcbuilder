@@ -35,7 +35,7 @@
                                 <p class="card-text">Brand: {{ $product->item_brand->name }}</p>
                                 <p class="card-text">Type: {{ $product->hardware_type->type }}</p>
                                 <p class="card-text">Price: ${{ $product->price }}</p>
-                                <a href="{{ route('shop.buy', ['id' => $product->id]) }}" class="mt-auto align-bottom btn-block btn {{ (Auth::user()->money >= $product->price) ? 'btn-success' : 'btn-danger disabled' }}">Purchase</a>
+                                <a href="{{ route('shop.buy', ['id' => $product->id]) }}" class="mt-auto align-bottom btn-block btn {{ ($player->money >= $product->price) ? 'btn-success' : 'btn-danger disabled' }}">Purchase</a>
                             </div>
                         </div>
                     </div>
