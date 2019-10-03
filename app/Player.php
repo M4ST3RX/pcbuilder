@@ -8,6 +8,6 @@ class Player extends Model
 {
     public function computers()
     {
-        return $this->hasMany(Computer::class, 'id', 'user_id');
+        return $this->hasMany(Computer::class, 'user_id', 'user_id');
     }
 }
