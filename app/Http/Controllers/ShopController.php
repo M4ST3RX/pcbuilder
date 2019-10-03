@@ -9,12 +9,15 @@ use App\Player;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
 
 class ShopController extends Controller
 {
     public function __construct()
     {
-        parent::__construct();
+        $player = Player::where('user_id', Auth::id())->first();
+
+        View::share('player', $player);
         $this->middleware('auth');
     }
 
