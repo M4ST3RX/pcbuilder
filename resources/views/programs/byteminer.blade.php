@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@php
+    $player = \App\Player::where('user_id', \Illuminate\Support\Facades\Auth::id())->first();
+@endphp
+
 @section('content')
     <div class="container">
         <div class="row">
@@ -11,7 +15,7 @@
                     <div class="card-header">ByteMiner</div>
 
                     <div class="card-body">
-                        <p>Total ByteCoins: {{ number_format(Auth::user()->bytecoin / 100000, 5) }} <a style="margin-left: 10px" href="{{ route('programs.byteminer.sell') }}" role="button" class="btn {{ (Auth::user()->bytecoin * 381 < 100000) ? 'disabled' : '' }} btn-sm btn-primary">Sell - ${{ number_format(Auth::user()->bytecoin * 381 / 100000, 2, '.', ' ') }}</a></p>
+                        <p>Total ByteCoins: {{ number_format($player->bytecoin / 100000, 5) }} <a style="margin-left: 10px" href="{{ route('programs.byteminer.sell') }}" role="button" class="btn {{ ($player->bytecoin * 381 < 100000) ? 'disabled' : '' }} btn-sm btn-primary">Sell - ${{ number_format($player->bytecoin * 381 / 100000, 2, '.', ' ') }}</a></p>
                         <p>Mined ByteCoins: {{ number_format($computer->current_mined_coins() / 100000, 5) }}</p>
                         <p>Mine Speed: {{ number_format($computer->mine_speed() / 100000, 5) . ' ByteCoin / minute' }}</p>
                         <p>RAM capacity: {{ $computer->ram_mine_capacity() }}</p>

@@ -12,13 +12,18 @@
 */
 
 Route::get('/', function () {
-    return redirect('/login');
+    return redirect('/computers');
 });
 
 Auth::routes();
 
+Route::get('/login', function(){
+    return redirect('https://auth.m4st3rx.com');
+})->name('login');
+
 Route::get('/home', 'ComputerController@index')->name('index');
 Route::get('/computers', 'ComputerController@selector')->name('computers');
+
 Route::group(['middleware' => ['computer']], function () {
     Route::get('/computer/play/{id}', 'ComputerController@play')->name('computer.play');
     Route::get('/computer/assembler/{id}', 'ComputerController@assembler')->name('computer.assembler');

@@ -1,9 +1,16 @@
 @extends('layouts.app')
 
+@php
+    $player = \App\Player::where('user_id', \Illuminate\Support\Facades\Auth::id())->first();
+@endphp
+
 @section('content')
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+                @if(Session::has('message'))
+                    <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
+                @endif
                 <div class="card">
                     <div class="card-header">{{ __('Create Company') }}</div>
 
@@ -62,7 +69,7 @@
 
                             <div class="form-row mb-0 mt-4">
                                 <div class="offset-md-5">
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="submit" class="btn {{ ($player->money < 1e6) ? 'disabled' : '' }} btn-primary" {{ ($player->money < 1e6) ? 'disabled' : '' }}>
                                         {{ __('Create ($10,000)') }}
                                     </button>
                                 </div>

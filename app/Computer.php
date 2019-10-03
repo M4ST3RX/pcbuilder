@@ -86,14 +86,13 @@ class Computer extends Model
         $diff = Carbon::now()->getTimestamp() - $this->mine_start_time;
 
         $coins = round($diff / 60, 0, PHP_ROUND_HALF_DOWN);
-//        if(Util::formatSize($this->ram_capacity(), 'B') <= $coins * 4096) {
-//            $coins = Util::formatSize($this->ram_capacity(), 'B') * 20 / 1024 / 10 / 60 * 0.00001;
-//        }
+        if(Util::formatSize($this->ram_capacity(), 'B') <= $coins * 4096) {
+            $coins = Util::formatSize($this->ram_capacity(), 'B') / 4096;
+        }
 
         $bonus = (json_decode($video_card->data)->speed / 100) * $coins;
 
         return round($coins + $bonus, 0);
-//        return sprintf('%.5f', intval(($coins + $bonus)*100000)/100000);
     }
 
     public function mine_speed()

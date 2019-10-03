@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@php
+    $player = Player::where('user_id', Auth::id())->first();
+@endphp
+
 @section('content')
     <div class="container">
         <div class="row">

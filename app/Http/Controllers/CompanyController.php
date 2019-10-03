@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Company;
 use App\CompanyType;
 use App\Http\Requests\CompanyRequest;
+use App\Player;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class CompanyController extends Controller
 {
@@ -18,19 +20,30 @@ class CompanyController extends Controller
 
     public function index()
     {
-        if(!Auth::user()->company_id) {
+        $player = Player::where('user_id', Auth::id())->first();
+
+        if(!$player->company_id) {
             $company_types = CompanyType::all();
             return view('company.create')->with(['company_types' => $company_types]);
         }
 
-        $company = Company::find(Auth::user()->company_id);
+        $company = Company::find($player->company_id);
+
 
         return view('company.index')->with(['company' => $company, 'active' => 'home']);
     }
 
     public function create(CompanyRequest $request)
     {
-        if(!Auth::user()->company_id) {
+        $player = Player::where('user_id', Auth::id())->first();
+
+        if($player->money < 1e6) {
+            Session::flash('message', 'You don\'t have enough money to start a company.');
+            Session::flash('alert-class', 'alert-danger');
+            return redirect('/company');
+        }
+
+        if(!$player->company_id) {
             $company = new Company();
             $company->owner = Auth::id();
             $company->type = $request->get('company_type');
@@ -39,9 +52,8 @@ class CompanyController extends Controller
 
             $company->save();
 
-            $user = User::find(Auth::id());
-            $user->company_id = $company->id;
-            $user->save();
+            $player->company_id = $company->id;
+            $player->save();
         }
 
         return redirect('/company');
@@ -49,11 +61,13 @@ class CompanyController extends Controller
 
     public function ranks()
     {
-        if(!Auth::user()->company_id) {
+        $player = Player::where('user_id', Auth::id())->first();
+
+        if(!$player->company_id) {
             return redirect()->back();
         }
 
-        $ranks = Auth::user()->company->ranks;
+        $ranks = $player->company->ranks;
 
         return view('company.ranks')->with(['ranks' => $ranks, 'active' => 'ranks']);
     }
