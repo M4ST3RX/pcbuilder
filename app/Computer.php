@@ -93,7 +93,6 @@ class Computer extends Model
         $bonus = (json_decode($video_card->data)->speed / 100) * $coins;
 
         return round($coins + $bonus, 0);
-//        return sprintf('%.5f', intval(($coins + $bonus)*100000)/100000);
     }
 
     public function mine_speed()

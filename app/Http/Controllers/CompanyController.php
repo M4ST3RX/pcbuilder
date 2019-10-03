@@ -9,6 +9,7 @@ use App\Player;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class CompanyController extends Controller
 {
@@ -35,6 +36,12 @@ class CompanyController extends Controller
     {
         $player = Player::where('user_id', Auth::id())->first();
 
+        if($player->money < 1e6) {
+            Session::flash('message', 'You don\'t have enough money to start a company.');
+            Session::flash('alert-class', 'alert-danger');
+            return redirect('/company');
+        }
+
         if(!$player->company_id) {
             $company = new Company();
             $company->owner = Auth::id();
@@ -47,5 +54,7 @@ class CompanyController extends Controller
             $player->company_id = $company->id;
             $player->save();
         }
+
+        return redirect('/company');
     }
 }
