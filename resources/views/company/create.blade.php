@@ -23,7 +23,7 @@
                                     <label for="company_name" class="col-md-12 col-form-label">{{ __('Company Name') }}</label>
 
                                     <div class="col-md-12">
-                                        <input id="company_name" type="text" class="form-control @error('company_name') is-invalid @enderror" name="company_name" value="{{ old('company_name') }}" required autocomplete="company_name" autofocus>
+                                        <input id="company_name" type="text" class="form-control @error('company_name') is-invalid @enderror" name="company_name" value="{{ old('company_name') }}" required maxlength="32" autocomplete="company_name" autofocus>
 
                                         @error('company_name')
                                         <span class="invalid-feedback" role="alert">
@@ -56,7 +56,7 @@
                                     <label for="company_slogan" class="col-md-12 col-form-label">{{ __('Company Slogan') }}</label>
 
                                     <div class="col-md-12">
-                                        <input id="company_slogan" type="text" class="form-control @error('company_slogan') is-invalid @enderror" name="company_slogan" value="{{ old('company_name') }}" required autocomplete="company_slogan">
+                                        <input id="company_slogan" type="text" maxlength="255" class="form-control @error('company_slogan') is-invalid @enderror" name="company_slogan" value="{{ old('company_name') }}" required autocomplete="company_slogan">
 
                                         @error('company_slogan')
                                         <span class="invalid-feedback" role="alert">

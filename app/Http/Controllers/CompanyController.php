@@ -29,7 +29,8 @@ class CompanyController extends Controller
 
         $company = Company::find($player->company_id);
 
-        return view('company.index')->with(['company' => $company]);
+
+        return view('company.index')->with(['company' => $company, 'active' => 'home']);
     }
 
     public function create(CompanyRequest $request)
@@ -56,5 +57,18 @@ class CompanyController extends Controller
         }
 
         return redirect('/company');
+    }
+
+    public function ranks()
+    {
+        $player = Player::where('user_id', Auth::id())->first();
+
+        if(!$player->company_id) {
+            return redirect()->back();
+        }
+
+        $ranks = $player->company->ranks;
+
+        return view('company.ranks')->with(['ranks' => $ranks, 'active' => 'ranks']);
     }
 }
