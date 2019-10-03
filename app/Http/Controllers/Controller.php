@@ -18,6 +18,8 @@ class Controller extends BaseController
     {
         $player = Player::where('user_id', Auth::id())->first();
 
+
+        dd($player);
         View::share('player', $player);
     }
 }
