@@ -40,4 +40,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Computer::class);
     }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
 }

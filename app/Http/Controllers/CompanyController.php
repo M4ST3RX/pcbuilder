@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Auth;
 
 class CompanyController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         if(!Auth::user()->company_id) {
@@ -18,9 +23,9 @@ class CompanyController extends Controller
             return view('company.create')->with(['company_types' => $company_types]);
         }
 
-        $company = Company::find(Auth::user()->comapny_id);
+        $company = Company::find(Auth::user()->company_id);
 
-        return view('company.index')->with(['company' => $company]);
+        return view('company.index')->with(['company' => $company, 'active' => 'home']);
     }
 
     public function create(CompanyRequest $request)
@@ -37,8 +42,19 @@ class CompanyController extends Controller
             $user = User::find(Auth::id());
             $user->company_id = $company->id;
             $user->save();
-
-
         }
+
+        return redirect('/company');
+    }
+
+    public function ranks()
+    {
+        if(!Auth::user()->company_id) {
+            return redirect()->back();
+        }
+
+        $ranks = Auth::user()->company->ranks;
+
+        return view('company.ranks')->with(['ranks' => $ranks, 'active' => 'ranks']);
     }
 }
