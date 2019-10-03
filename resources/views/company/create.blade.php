@@ -69,7 +69,7 @@
 
                             <div class="form-row mb-0 mt-4">
                                 <div class="offset-md-5">
-                                    <button type="submit" class="btn {{ ($player->money < 1e6) ?? 'disabled' }} btn-primary">
+                                    <button type="submit" class="btn btn-primary" {{ ($player->money < 1e6) ?? 'disabled' }}>
                                         {{ __('Create ($10,000)') }}
                                     </button>
                                 </div>
