@@ -23,7 +23,8 @@ class ComputerController extends Controller
 
     public function selector()
     {
-        $computers = Auth::user()->player->computers;
+        $player = Player::where('player_id', Auth::id())->first();
+        $computers = $player->computers;
         Session::forget('computer_id');
 
         return view('computer.select')->with(['computers' => $computers]);
@@ -45,10 +46,11 @@ class ComputerController extends Controller
 
     public function assembler($id)
     {
+        $player = Player::where('player_id', Auth::id())->first();
         $computer = Computer::find($id);
-        if($computer->user_id !== Auth::user()->player->id) return redirect()->back();
+        if($computer->user_id !== $player->id) return redirect()->back();
 
-        $items = Item::where('user_id', Auth::user()->player->id)->where('computer_id', null)->orWhere('computer_id', $computer->id)->get();
+        $items = Item::where('user_id', $player->id)->where('computer_id', null)->orWhere('computer_id', $computer->id)->get();
 
         return view('computer.assembler')->with(['items' => $items, 'computer' => $computer]);
     }
