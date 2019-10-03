@@ -16,9 +16,6 @@ class ShopController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-
-        $player = Player::where('user_id', Auth::id())->first();
-        View::share('player', $player);
     }
 
     public function index()
