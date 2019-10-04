@@ -10,4 +10,9 @@ class Player extends Model
     {
         return $this->hasMany(Computer::class, 'user_id', 'user_id');
     }
+
+    public function company()
+    {
+        return $this->hasOne(Company::class, 'user_id', 'user_id');
+    }
 }
