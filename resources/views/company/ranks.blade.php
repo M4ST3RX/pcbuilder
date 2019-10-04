@@ -25,10 +25,10 @@
                                         <td colspan="2">{{ $rank->name }}</td>
                                         <td>
                                             @if($rank->position !== 1)
-                                                <a href="" class="btn btn-primary" role="button">Up</a>
+                                                <a href="{{ route('company.ranks.up', ['id' => $rank->id]) }}" class="btn btn-primary" role="button">Up</a>
                                             @endif
                                             @if($rank->position !== count($ranks))
-                                                <a href="" class="btn btn-primary" role="button">Down</a>
+                                                <a href="{{ route('company.ranks.down', ['id' => $rank->id]) }}" class="btn btn-primary" role="button">Down</a>
                                             @endif
                                             <a href="" class="btn btn-primary" data-toggle="modal" data-target="#editModal" role="button">Rename</a>
                                             <a href="" class="btn btn-danger" role="button">Delete</a>
