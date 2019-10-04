@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Company;
+use App\CompanyRanks;
 use App\CompanyType;
 use App\Http\Requests\CompanyRequest;
 use App\Player;
@@ -57,6 +58,21 @@ class CompanyController extends Controller
         }
 
         return redirect('/company');
+    }
+
+    public function createRank(Request $request)
+    {
+        $player = Player::where('user_id', Auth::id())->first();
+        $company = $player->company;
+
+        if($company->owner == $player->user_id) {
+            $rank = new CompanyRanks();
+            $rank->company_id = $company->id;
+            $rank->name = $request->get('rank');
+            $rank->save();
+        }
+
+        return redirect('/company/ranks');
     }
 
     public function ranks()

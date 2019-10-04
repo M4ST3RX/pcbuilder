@@ -73,11 +73,14 @@
                     </button>
                 </div>
                 <div class="modal-body">
-
+                    <form id="rank_create" action="/company/ranks/create" method="post">
+                        <label for="rank_name">Rank Name:</label>
+                        <input id="rank_name" type="text" name="rank">
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Create</button>
+                    <button type="button" class="btn btn-primary" onclick="document.getElementById('rank_create').submit();">Create</button>
                 </div>
             </div>
         </div>

@@ -43,6 +43,7 @@ Route::get('/company', 'CompanyController@index')->name('company');
 Route::post('/company/create', 'CompanyController@create')->name('company.create');
 Route::get('/company/ranks', 'CompanyController@ranks')->name('company.ranks');
 Route::get('/company/ranks/create', 'CompanyController@create')->name('company.ranks.create');
+Route::post('/company/ranks/create', 'CompanyController@createRank');
 
 
 Route::get('/shop/buy/{id}', 'ShopController@purchase')->name('shop.buy');
