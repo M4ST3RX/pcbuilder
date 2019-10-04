@@ -43,7 +43,7 @@ class CompanyController extends Controller
             $rank = new CompanyRanks();
             $rank->company_id = $company->id;
             $rank->name = $request->get('rank');
-            $rank->position = $company->ranks()->count();
+            $rank->position = $company->ranks()->count() + 1;
             $rank->save();
         }
 
