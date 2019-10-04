@@ -108,4 +108,17 @@ class CompanyController extends Controller
 
         return view('company.ranks')->with(['ranks' => $ranks, 'active' => 'ranks']);
     }
+
+    public function employees()
+    {
+        $player = Player::where('user_id', Auth::id())->first();
+
+        if(!$player->company_id) {
+            return redirect()->back();
+        }
+
+        $employees = $player->company->employees;
+
+        return view('company.employees')->with(['employees' => $employees, 'active' => 'employees']);
+    }
 }

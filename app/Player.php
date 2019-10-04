@@ -15,4 +15,9 @@ class Player extends Model
     {
         return $this->hasOne(Company::class, 'id', 'user_id');
     }
+
+    public function auth()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
