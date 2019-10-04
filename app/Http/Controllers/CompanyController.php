@@ -104,7 +104,7 @@ class CompanyController extends Controller
             return redirect()->back();
         }
 
-        $ranks = $player->company->ranks;
+        $ranks = $player->company->ranks()->orderBy('position', 'ASC')->get();
 
         return view('company.ranks')->with(['ranks' => $ranks, 'active' => 'ranks']);
     }
