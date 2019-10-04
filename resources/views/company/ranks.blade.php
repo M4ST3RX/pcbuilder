@@ -24,8 +24,12 @@
                                         <th scope="row">{{ $rank->position }}</th>
                                         <td colspan="2">{{ $rank->name }}</td>
                                         <td>
-                                            <a href="" class="btn btn-primary" role="button">Up</a>
-                                            <a href="" class="btn btn-primary" role="button">Down</a>
+                                            @if($rank->position !== 1)
+                                                <a href="" class="btn btn-primary" role="button">Up</a>
+                                            @endif
+                                            @if($rank->position !== count($ranks))
+                                                <a href="" class="btn btn-primary" role="button">Down</a>
+                                            @endif
                                             <a href="" class="btn btn-primary" data-toggle="modal" data-target="#editModal" role="button">Rename</a>
                                             <a href="" class="btn btn-danger" role="button">Delete</a>
                                         </td>
