@@ -18,6 +18,6 @@ class Player extends Model
 
     public function auth()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOne(User::class);
     }
 }
