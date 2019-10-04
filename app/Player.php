@@ -13,6 +13,6 @@ class Player extends Model
 
     public function company()
     {
-        return $this->hasOne(Company::class, 'user_id', 'user_id');
+        return $this->hasOne(Company::class, 'id', 'user_id');
     }
 }
