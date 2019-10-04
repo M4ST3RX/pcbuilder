@@ -74,6 +74,7 @@
                 </div>
                 <div class="modal-body">
                     <form id="rank_create" action="/company/ranks/create" method="post">
+                        @csrf
                         <label for="rank_name">Rank Name:</label>
                         <input id="rank_name" type="text" name="rank">
                     </form>
