@@ -119,6 +119,8 @@ class CompanyController extends Controller
 
         $employees = $player->company->employees;
 
+        dd($employees);
+
         return view('company.employees')->with(['employees' => $employees, 'active' => 'employees']);
     }
 }
