@@ -34,32 +34,6 @@ class CompanyController extends Controller
         return view('company.index')->with(['company' => $company, 'active' => 'home']);
     }
 
-    public function create(CompanyRequest $request)
-    {
-        $player = Player::where('user_id', Auth::id())->first();
-
-        if($player->money < 1e6) {
-            Session::flash('message', 'You don\'t have enough money to start a company.');
-            Session::flash('alert-class', 'alert-danger');
-            return redirect('/company');
-        }
-
-        if(!$player->company_id) {
-            $company = new Company();
-            $company->owner = Auth::id();
-            $company->type = $request->get('company_type');
-            $company->name = $request->get('company_name');
-            $company->slogan = $request->get('company_slogan');
-
-            $company->save();
-
-            $player->company_id = $company->id;
-            $player->save();
-        }
-
-        return redirect('/company');
-    }
-
     public function createRank(Request $request)
     {
         $player = Player::where('user_id', Auth::id())->first();
