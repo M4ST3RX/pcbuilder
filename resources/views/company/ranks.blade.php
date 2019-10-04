@@ -11,17 +11,15 @@
                         @include('company.tabs', ['active' => $active])
                         <div class="card-body">
                             <table class="table table-hover">
-                                <thead>
+                                <tbody>
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Name</th>
                                         <th scope="col">Actions</th>
                                     </tr>
-                                </thead>
-                                <tbody>
                                 @foreach($ranks as $rank)
                                     <tr>
-                                        <th scope="row">{{ $rank->position }}</th>
+                                        <td scope="row">{{ $rank->position }}</td>
                                         <td colspan="2">{{ $rank->name }}</td>
                                         <td>
                                             @if($rank->position !== 1)
