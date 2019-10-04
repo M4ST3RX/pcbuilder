@@ -36,7 +36,7 @@
                             </table>
                         </div>
                         <div class="card-footer">
-                            <a href="{{ route('company.ranks.create') }}" data-toggle="modal" data-target="#createModal" role="button" class="btn btn-success">New Rank</a>
+                            <a href="#" data-toggle="modal" data-target="#createModal" role="button" class="btn btn-success">New Rank</a>
                         </div>
                     </div>
             </div>
