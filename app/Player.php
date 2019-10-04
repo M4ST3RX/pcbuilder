@@ -24,6 +24,6 @@ class Player extends Model
 
     public function company_rank()
     {
-        return $this->hasOne(CompanyRanks::class, 'company_rank_id', 'id');
+        return $this->hasOne(CompanyRanks::class, 'id', 'company_rank_id');
     }
 }
