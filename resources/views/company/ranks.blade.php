@@ -15,8 +15,7 @@
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Name</th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
+                                        <th scope="col">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -76,7 +75,7 @@
                     <form id="rank_create" action="/company/ranks/create" method="post">
                         @csrf
                         <label for="rank_name">Rank Name:</label>
-                        <input id="rank_name" type="text" name="rank">
+                        <input id="rank_name" width="100%" type="text" name="rank">
                     </form>
                 </div>
                 <div class="modal-footer">

@@ -43,7 +43,54 @@ class CompanyController extends Controller
             $rank = new CompanyRanks();
             $rank->company_id = $company->id;
             $rank->name = $request->get('rank');
+            $rank->position = $company->ranks()->count();
             $rank->save();
+        }
+
+        return redirect('/company/ranks');
+    }
+
+    public function ranksMoveUp($id)
+    {
+        $player = Player::where('user_id', Auth::id())->first();
+        $company = $player->company;
+
+        if($company->owner == $player->user_id) {
+            $company_rank = CompanyRanks::find($id);
+            $current_pos = $company_rank->position;
+
+            if($current_pos === 1) return redirect('/company/ranks');
+
+            $rank_above = CompanyRanks::where('company_id', $company->id)->where('position', $current_pos - 1)->first();
+
+            $rank_above->position = $current_pos;
+            $company_rank->position = $current_pos - 1;
+
+            $rank_above->save();
+            $company_rank->save();
+        }
+
+        return redirect('/company/ranks');
+    }
+
+    public function ranksMoveDown($id)
+    {
+        $player = Player::where('user_id', Auth::id())->first();
+        $company = $player->company;
+
+        if($company->owner == $player->user_id) {
+            $company_rank = CompanyRanks::find($id);
+            $current_pos = $company_rank->position;
+
+            if($current_pos === $company->ranks()->count()) return redirect('/company/ranks');
+
+            $rank_below = CompanyRanks::where('company_id', $company->id)->where('position', $current_pos + 1)->first();
+
+            $rank_below->position = $current_pos;
+            $company_rank->position = $current_pos + 1;
+
+            $rank_below->save();
+            $company_rank->save();
         }
 
         return redirect('/company/ranks');
