@@ -24,6 +24,8 @@ class ComputerController extends Controller
     public function selector()
     {
         $player = Player::where('user_id', Auth::id())->first();
+
+        dd($player);
         $computers = $player->computers;
         Session::forget('computer_id');
 
