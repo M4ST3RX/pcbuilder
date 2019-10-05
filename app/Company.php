@@ -10,4 +10,9 @@ class Company extends Model
     {
         return $this->hasMany(CompanyRanks::class);
     }
+
+    public function employees()
+    {
+        return $this->hasMany(Player::class);
+    }
 }

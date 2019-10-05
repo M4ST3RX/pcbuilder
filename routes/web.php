@@ -42,7 +42,11 @@ Route::get('/programs/byteminer/sell', 'ByteMinerController@sell')->name('progra
 Route::get('/company', 'CompanyController@index')->name('company');
 Route::post('/company/create', 'CompanyController@create')->name('company.create');
 Route::get('/company/ranks', 'CompanyController@ranks')->name('company.ranks');
-Route::get('/company/ranks/create', 'CompanyController@create')->name('company.ranks.create');
+Route::get('/company/employees', 'CompanyController@employees')->name('company.employees');
+Route::get('/company/ranks', 'CompanyController@ranks')->name('company.ranks');
+Route::get('/company/ranks/up/{id}', 'CompanyController@ranksMoveUp')->name('company.ranks.up');
+Route::get('/company/ranks/down/{id}', 'CompanyController@ranksMoveDown')->name('company.ranks.down');
+Route::post('/company/ranks/create', 'CompanyController@createRank');
 
 
 Route::get('/shop/buy/{id}', 'ShopController@purchase')->name('shop.buy');
