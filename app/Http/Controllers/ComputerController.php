@@ -39,7 +39,9 @@ class ComputerController extends Controller
 
     public function play($id)
     {
+        dd("ads");
         $computer = Computer::find($id);
+        
         if($computer->state === 0){
             Session::flash('message', 'The computer is not turned on.');
             Session::flash('alert-class', 'alert-danger');

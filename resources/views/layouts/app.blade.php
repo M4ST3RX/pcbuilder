@@ -65,7 +65,7 @@
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('company') }}">{{ __('Company') }}</a>
+                                <a class="nav-link" href="{{ route('company.index') }}">{{ __('Company') }}</a>
                             </li>
                         @endif
                     @endauth

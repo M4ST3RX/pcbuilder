@@ -48,7 +48,7 @@ class Computer extends Model
             $totalSize += json_decode($item->data)->size;
         }
 
-        return ($storage) ? Util::formatSizeUnits($totalSize) : 0;
+        return (count($storage) > 0) ? Util::formatSizeUnits($totalSize) : 0;
     }
 
     public function storage_speed()

@@ -121,17 +121,39 @@ class CompanyController extends Controller
 
         return view('company.employees')->with(['employees' => $employees, 'active' => 'employees']);
     }
-
-    public function ranks()
+    
+    public function management()
     {
         $player = Player::where('user_id', Auth::id())->first();
+        
+        if(!$player->company_id) {
+            return redirect()->back();
+        }
+        
+        return view('company.management')->with(['active' => 'management']);
+    }
+
+    public function invite(Request $request)
+    {
+        $player = Player::where('user_id', Auth::id())->first();
+        $user = User::where('username', $request->get('player_name'))->first();
+        $invitedPlayer = Player::where('user_id', $user->id)->first();
+        $company = $player->company;
 
         if(!$player->company_id) {
             return redirect()->back();
         }
+        
+        if($invitedPlayer->company_id) {
+            Session::flash('message', 'This user is in a company.');
+            Session::flash('alert-class', 'alert-danger');
+            return redirect('/company/management');
+        }
 
-        $ranks = $player->company->ranks;
-
-        return view('company.ranks')->with(['ranks' => $ranks, 'active' => 'ranks']);
+        $invitedPlayer->company_id = $company->id;
+        $invitedPlayer->company_rank_id = $company->ranks->last()->id;
+        $invitedPlayer->save();
+        
+        return redirect('/company/management');
     }
 }

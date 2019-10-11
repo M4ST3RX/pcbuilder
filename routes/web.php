@@ -24,30 +24,43 @@ Route::get('/login', function(){
 Route::get('/home', 'ComputerController@index')->name('index');
 Route::get('/computers', 'ComputerController@selector')->name('computers');
 
-Route::group(['middleware' => ['computer']], function () {
-    Route::get('/computer/play/{id}', 'ComputerController@play')->name('computer.play');
-    Route::get('/computer/assembler/{id}', 'ComputerController@assembler')->name('computer.assembler');
-    Route::get('/computer/state/{id}', 'ComputerController@set_state')->name('computer.state');
-    Route::get('/computer/add-part/{id}/{item_id}', 'ComputerController@add_part')->name('computer.add-part');
-    Route::get('/computer/remove-part/{id}/{item_id}', 'ComputerController@remove_part')->name('computer.remove-part');
+Route::prefix('computer')
+    ->name('computer.')
+    ->middleware('')
+    ->group(function () {
+    // GET
+    Route::get('play/{id}', 'ComputerController@play')->name('play');
+    Route::get('assembler/{id}', 'ComputerController@assembler')->name('assembler');
+    Route::get('state/{id}', 'ComputerController@set_state')->name('state');
+    Route::get('add-part/{id}/{item_id}', 'ComputerController@add_part')->name('add-part');
+    Route::get('remove-part/{id}/{item_id}', 'ComputerController@remove_part')->name('remove-part');
+}); //['middleware' => ['computer']]
+
+Route::prefix('programs')
+    ->name('programs.')
+    ->group(function () {
+    // GET
+    Route::get('byteminer', 'ByteMinerController@byteminer')->name('byteminer');
+    Route::get('byteminer/mine', 'ByteMinerController@byteminer_start')->name('byteminer.mine');
+    Route::get('byteminer/collect', 'ByteMinerController@byteminer_collect')->name('byteminer.collect');
+    Route::get('byteminer/sell', 'ByteMinerController@sell')->name('byteminer.sell');
 });
 
-
-Route::get('/programs/byteminer', 'ByteMinerController@byteminer')->name('programs.byteminer');
-Route::get('/programs/byteminer/mine', 'ByteMinerController@byteminer_start')->name('programs.byteminer.mine');
-Route::get('/programs/byteminer/collect', 'ByteMinerController@byteminer_collect')->name('programs.byteminer.collect');
-Route::get('/programs/byteminer/sell', 'ByteMinerController@sell')->name('programs.byteminer.sell');
-
-
-Route::get('/company', 'CompanyController@index')->name('company');
-Route::post('/company/create', 'CompanyController@create')->name('company.create');
-Route::get('/company/ranks', 'CompanyController@ranks')->name('company.ranks');
-Route::get('/company/employees', 'CompanyController@employees')->name('company.employees');
-Route::get('/company/ranks', 'CompanyController@ranks')->name('company.ranks');
-Route::get('/company/ranks/up/{id}', 'CompanyController@ranksMoveUp')->name('company.ranks.up');
-Route::get('/company/ranks/down/{id}', 'CompanyController@ranksMoveDown')->name('company.ranks.down');
-Route::post('/company/ranks/create', 'CompanyController@createRank');
-
+Route::prefix('company')
+    ->name('company.')
+    ->group(function () {
+    // GET
+    Route::get('/', 'CompanyController@index')->name('index');
+    Route::get('ranks', 'CompanyController@ranks')->name('ranks');
+    Route::get('employees', 'CompanyController@employees')->name('employees');
+    Route::get('management', 'CompanyController@management')->name('management');
+    Route::get('ranks/up/{id}', 'CompanyController@ranksMoveUp')->name('ranks.up');
+    Route::get('ranks/down/{id}', 'CompanyController@ranksMoveDown')->name('ranks.down');
+    // POST
+    Route::post('create', 'CompanyController@create')->name('create');
+    Route::post('invite', 'CompanyController@invite')->name('invite');
+    Route::post('ranks/create', 'CompanyController@createRank');
+});
 
 Route::get('/shop/buy/{id}', 'ShopController@purchase')->name('shop.buy');
 Route::get('/shop', 'ShopController@index')->name('shop');
