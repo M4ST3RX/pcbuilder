@@ -39,7 +39,6 @@ class ComputerController extends Controller
 
     public function play($id)
     {
-        dd("ads");
         $computer = Computer::find($id);
         
         if($computer->state === 0){
