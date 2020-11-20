@@ -26,7 +26,7 @@ Route::get('/computers', 'ComputerController@selector')->name('computers');
 
 Route::prefix('computer')
     ->name('computer.')
-    ->middleware('')
+    ->middleware('computer')
     ->group(function () {
     // GET
     Route::get('play/{id}', 'ComputerController@play')->name('play');
