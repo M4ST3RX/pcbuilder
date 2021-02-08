@@ -10,9 +10,10 @@
     "require": {
         "php": "^7.3",
         "ext-json": "*",
-        "laravel/framework": "^8.15.0",
-        "guzzlehttp/guzzle": "^7.0.1",
         "facade/ignition": "^2.3.6",
+        "fideloper/proxy": "^4.4",
+        "guzzlehttp/guzzle": "^7.0.1",
+        "laravel/framework": "^8.15.0",
         "laravel/ui": "^3.0"
     },
     "require-dev": {
