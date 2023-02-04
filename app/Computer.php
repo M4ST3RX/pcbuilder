@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Enums\ItemType;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -51,7 +52,7 @@ class Computer extends Model
     public function canPlaceItem($item_id, $slot) {
         $item = Item::find($item_id);
 
-        return $item->prefab->type === Util::computerSlotToType($slot);
+        return $item->type === Util::computerSlotToType($slot);
     }
 
     public function storage_size($display = false)
@@ -61,7 +62,7 @@ class Computer extends Model
         $items = Item::where('computer_id', Session::get('computer_id'))->where('in_computer', true)->get();
 
         foreach ($items as $item) {
-            if ($item->prefab->type == 4) {
+            if ($item->type == ItemType::HARD_DRIVE) {
                 $item_data = json_decode($item->data, true);
                 if (!isset($item_data['size'])) continue;
                 $storageSize += $item_data['size'] * ($item_data['quality'] / 100);
@@ -79,7 +80,7 @@ class Computer extends Model
         $items = Item::where('computer_id', Session::get('computer_id'))->where('in_computer', true)->get();
 
         foreach ($items as $item) {
-            if ($item->prefab->type == 4) {
+            if ($item->type == ItemType::HARD_DRIVE) {
                 $numberOfStorage++;
                 $item_data = json_decode($item->data, true);
                 if (!isset($item_data['speed'])) continue;
@@ -99,7 +100,7 @@ class Computer extends Model
         $items = Item::where('computer_id', Session::get('computer_id'))->where('in_computer', true)->get();
 
         foreach ($items as $item) {
-            if ($item->prefab->type == 3) {
+            if ($item->type == ItemType::GRAPHICS_CARD) {
                 $item_data = json_decode($item->data, true);
                 if (!isset($item_data['attributes']['hash_rate'])) continue;
                 $hash_rate += $item_data['attributes']['hash_rate'];
@@ -141,7 +142,7 @@ class Computer extends Model
         $items = Item::where('computer_id', Session::get('computer_id'))->where('in_computer', true)->get();
 
         foreach ($items as $item) {
-            if ($item->prefab->type == 3) {
+            if ($item->type == ItemType::GRAPHICS_CARD) {
                 $item_data = json_decode($item->data, true);
                 if (!isset($item_data['attributes']['hash_rate'])) continue;
                 $hash_rate += $item_data['attributes']['hash_rate'];
@@ -163,7 +164,7 @@ class Computer extends Model
         $totalSize = 0;
         $items = Item::where('computer_id', Session::get('computer_id'))->where('in_computer', true)->get();
         foreach($items as $item) {
-            if ($item->prefab->type == 5) {
+            if ($item->type == ItemType::MEMORY) {
                 $item_data = json_decode($item->data, true);
                 if(!isset($item_data['attributes']['size'])) continue;
                 $totalSize += $item_data['attributes']['size'];
@@ -191,10 +192,10 @@ class Computer extends Model
         $array = [];
 
         foreach ($items as $item) {
-            $array[] = $item->prefab->type;
+            $array[] = $item->type;
         }
 
-        if((in_array(1, $array) && in_array(2, $array)) && in_array(3, $array) && in_array(4, $array) && in_array(5, $array) && in_array(6, $array)) return true;
+        if((in_array(ItemType::MOTHERBOARD, $array) && in_array(ItemType::PROCESSOR, $array)) && in_array(ItemType::GRAPHICS_CARD, $array) && in_array(ItemType::HARD_DRIVE, $array) && in_array(ItemType::MEMORY, $array) && in_array(ItemType::POWER_SUPPLY, $array)) return true;
         return false;
     }
 }

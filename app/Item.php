@@ -2,15 +2,14 @@
 
 namespace App;
 
+use App\Enums\ItemRarity;
+use App\Enums\ItemTier;
+use App\Enums\ItemType;
 use Illuminate\Database\Eloquent\Model;
 use App\Util;
 
 class Item extends Model
 {
-    public function prefab() {
-        return $this->belongsTo(ItemPrefab::class, 'item_prefab_id', 'id');
-    }
-
     public function getItemLevel() {
         $data = json_decode($this->data, true);
         return "Level " . (isset($data['level']) ? $data['level'] : "N/A");
@@ -19,20 +18,21 @@ class Item extends Model
     public function getImage() {
         switch($this->type) {
             case 1:
-                return 'motherboard.png';
+                $image = 'motherboard.png';
             case 2:
-                return 'cpu.png';
+                $image = 'processor.png';
             case 3:
-                return 'graphics_card.png';
+                $image = 'graphics_card.png';
             case 4:
-                return 'hard_drive.png';
+                $image = 'hard_drive.png';
             case 5:
-                return 'memory.png';
+                $image = 'memory.png';
             case 6:
-                return 'power_supply.png';
+                $image = 'power_supply.png';
             default:
-                return '';
+                $image = '';
         }
+        return asset('storage/images/items/' . $image);
     }
 
     public function getItemQualityName() {
@@ -80,5 +80,16 @@ class Item extends Model
         }
 
         return $attribute_string;
+    }
+
+    public function getName()
+    {
+        ItemTier::getDescription($this->tier) . " " . ItemRarity::getDescription($this->rarity) . " " . ItemType::getDescription($this->type);
+
+    }
+
+    public function getRarity($display = false)
+    {
+        return $display ? ItemRarity::getDescription($this->rarity) : strtolower(ItemRarity::getKey($this->rarity));
     }
 }

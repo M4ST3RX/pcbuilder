@@ -20,9 +20,8 @@ class ItemGenerator extends Model
 
     public function createItem($tier, $rarity, $type, $override_data = [])
     {
-        $itemPrefab = ItemPrefab::where('tier', $tier)->where('rarity', $rarity)->where('type', $type)->first();
-        if(!$itemPrefab) return false;
-        $attributes = $this->randomAttributes($itemPrefab->type);
+
+        $attributes = $this->randomAttributes($type);
 
         $data = [
             'attributes' => []
@@ -30,32 +29,35 @@ class ItemGenerator extends Model
 
         $this->item = new Item();
         $this->item->computer_id = Session::get('computer_id', 1);
-        $this->item->item_prefab_id = $itemPrefab->id;
+
         $this->item->in_computer = false;
         $this->item->slot = $this->inventoryManager->getNextAvailableSlot();
-        $this->item->quality = isset($override_data['quality']) ? $override_data['quality'] : $this->randomQuality($itemPrefab->tier, $itemPrefab->rarity);
+        $this->item->quality = isset($override_data['quality']) ? $override_data['quality'] : $this->randomQuality($tier, $rarity);
         $this->item->level = 1;
+        $this->item->tier = $tier;
+        $this->item->rarity = $rarity;
+        $this->item->type = $type;
 
         foreach($attributes as $attribute) {
             switch($attribute) {
                 case 'size':
-                    $range = Util::getStorageQualityRange($itemPrefab->tier, $itemPrefab->rarity);
+                    $range = Util::getStorageQualityRange($tier, $rarity);
                     $data['attributes'][$attribute] = round(($this->item->quality / 100) * ($range['max'] - $range['min']) + $range['min'], 2);
                     break;
                 case 'power':
-                    $range = Util::getPowerQualityRange($itemPrefab->tier, $itemPrefab->rarity);
+                    $range = Util::getPowerQualityRange($tier, $rarity);
                     $data['attributes'][$attribute] = round(($this->item->quality / 100) * ($range['max'] - $range['min']) + $range['min'], 2);
                     break;
                 case 'power_usage':
-                    $range = Util::getPowerUsageQualityRange($itemPrefab->tier, $itemPrefab->rarity, $itemPrefab->type);
+                    $range = Util::getPowerUsageQualityRange($tier, $rarity, $type);
                     $data['attributes'][$attribute] = round(($this->item->quality / 100) * ($range['max'] - $range['min']) + $range['min'], 2);
                     break;
                 case 'hash_rate':
-                    $range = Util::getHashRateQualityRange($itemPrefab->tier, $itemPrefab->rarity, $itemPrefab->type);
+                    $range = Util::getHashRateQualityRange($tier, $rarity, $type);
                     $data['attributes'][$attribute] = round(($this->item->quality / 100) * ($range['max'] - $range['min']) + $range['min'], 2);
                     break;
                 case 'cores':
-                    $range = Util::getCoresQualityRange($itemPrefab->tier, $itemPrefab->rarity);
+                    $range = Util::getCoresQualityRange($tier, $rarity);
                     $data['attributes'][$attribute] = round(($this->item->quality / 100) * ($range['max'] - $range['min']) + $range['min'], 0);
                     break;
                 default:

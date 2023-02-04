@@ -44,11 +44,7 @@
     </div>
     @foreach($inventoryManager->getItems() as $item)
     <div class="item_details_hover d-none" data-id="{{ $item->id }}">
-        <div class="item-name">{{ $item->prefab->name }}</div>
-        <div class="item-rarity-and-level d-flex justify-content-between">
-            <div class="item-tier">Tier {{ $item->prefab->tier }}</div>
-            <div class="item-rarity">{{ $item->prefab->getRarity() }}</div>
-        </div>
+        <div class="item-name">{{ $item->getName() }}</div>
         <div class="item-level">{{ $item->getItemLevel() }}</div>
         <div class="item-quality d-flex justify-content-start align-items-center">
             <div class="progress">

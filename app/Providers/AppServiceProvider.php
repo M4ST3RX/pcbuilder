@@ -35,6 +35,10 @@ class AppServiceProvider extends ServiceProvider
             if(Session::has('computer_id')) {
                 $currencies = [];
                 $computer = Computer::find(Session::get('computer_id'));
+                if (!$computer)
+                {
+                    return $view;
+                }
                 foreach(json_decode($computer->wallet->currencies, true) as $id => $value) {
                     $curr = Currency::find($id);
                     $currencies[$curr->name] = $value;

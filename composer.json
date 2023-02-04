@@ -10,11 +10,12 @@
     "require": {
         "php": "^8.0",
         "ext-json": "*",
-        "spatie/laravel-ignition": "^1.0",
+        "bensampo/laravel-enum": "^6.3",
         "fideloper/proxy": "^4.4",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^9.0",
-        "laravel/ui": "^3.0"
+        "laravel/ui": "^3.0",
+        "spatie/laravel-ignition": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.4",
