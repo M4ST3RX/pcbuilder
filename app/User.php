@@ -9,8 +9,6 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    protected $connection = "auth";
-
     /**
      * The attributes that are mass assignable.
      *
@@ -37,4 +35,23 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function computers()
+    {
+        return $this->hasMany(Computer::class, 'user_id', 'id');
+    }
+
+    public function company()
+    {
+        return $this->hasOne(Company::class, 'id', 'user_id');
+    }
+
+    public function company_rank()
+    {
+        return $this->hasOne(CompanyRanks::class, 'id', 'company_rank_id');
+    }
+
+    public function getBalance() {
+        return '$' . number_format($this->money / 100, 2, '.', ' ');
+    }
 }

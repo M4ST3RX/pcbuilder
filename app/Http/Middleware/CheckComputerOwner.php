@@ -17,8 +17,10 @@ class CheckComputerOwner
      */
     public function handle($request, Closure $next)
     {
-        $computer = Computer::find($request->id);
-        if($computer->user_id !== Auth::id()) abort(404);
+        if(isset($request->computer_id)) {
+            $computer = Computer::find($request->computer_id);
+            if($computer->user_id !== Auth::id()) abort(404);
+        }
 
         return $next($request);
     }

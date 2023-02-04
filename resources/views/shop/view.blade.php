@@ -1,49 +1,55 @@
 @extends('layouts.app')
 
-@php
-    $player = \App\Player::where('user_id', \Illuminate\Support\Facades\Auth::id())->first();
-@endphp
-
 @section('content')
-    <div class="d-flex col-md-8 offset-md-2">
-        <div class="row mr-3" style="height: fit-content;">
-            <div class="card p-2">
-                <div class="card-body d-flex flex-column">
-                    <div class="form-check">
-                        <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" value="">Option 1
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" value="">Option 2
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" value="" disabled>Option 3
-                        </label>
-                    </div>
-                </div>
-            </div>
+    <div class="container p-2 bg-dark">
+        <div class="nav nav-tabs mb-3 shop-tab" id="nav-tab" role="tablist">
+            @foreach($shops as $shop)
+                <a class="nav-item nav-link {{ $shop->id == 1 ? 'active' : '' }}" id="{{ strtolower(str_replace(' ', '-', $shop->name)) }}-tab" data-toggle="tab" href="#{{ strtolower(str_replace(' ', '-', $shop->name)) }}" role="tab" aria-controls="{{ strtolower(str_replace(' ', '-', $shop->name)) }}" aria-selected="{{ $shop->id == 1 ? 'true' : 'false' }}" data-id="{{ $shop->id }}">{{ $shop->name }}</a>
+            @endforeach
         </div>
 
-        <div class="row">
-            @if(count($products) > 0)
-                @foreach($products as $product)
-                    <div class="col-md-3 mb-4 d-flex align-items-stretch">
-                        <div class="card" data-type="{{ $product->hardware_type_id }}">
-                            <img class="card-img-top" src="https://placehold.it/286x170" alt="Card image cap">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">{{ $product->item_brand->name . ' ' .  $product->name }}</h5>
-                                <p class="card-text">Brand: {{ $product->item_brand->name }}</p>
-                                <p class="card-text">Type: {{ $product->hardware_type->type }}</p>
-                                <p class="card-text">Price: ${{ $product->price }}</p>
-                                <a href="{{ route('shop.buy', ['id' => $product->id]) }}" class="mt-auto align-bottom btn-block btn {{ ($player->money >= $product->price) ? 'btn-success' : 'btn-danger disabled' }}" {{ ($player->money < $product->price) ? 'disabled' : '' }}>Purchase</a>
-                            </div>
+        <div class="tab-content" id="nav-tabContent">
+            @foreach($shops as $shop)
+                <div class="tab-pane fade {{ $shop->id == 1 ? 'show active' : '' }} p-2" id="{{ strtolower(str_replace(' ', '-', $shop->name)) }}" role="tabpanel" aria-labelledby="{{ strtolower(str_replace(' ', '-', $shop->name)) }}-tab">
+                    <div class="d-flex flex-column">
+                        <div class="reset-date pb-2">Ends in: <div class="reset-datetime d-inline-flex"></div></div>
+                        <div class="row">
+                            @foreach($shop->items as $shop_item)
+                                <div class="col-md-3 col-lg-3 mb-4 d-flex" data-type="{{ $shop_item->item_prefab->type }}">
+                                    <div class="card card-bg-dark flex-grow-1">
+                                        <div class="clear">
+                                            @if($shop_item->discount > 0)
+                                            <div class="ribbon-container">
+                                                <div class="ribbon">{{ '-' . $shop_item->discount . '%' }}</div>
+                                            </div>
+                                            @endif
+                                            <div class="card-img-top d-flex justify-content-center" data-rarity="{{ $shop_item->item_prefab->getRarity(false) }}">
+                                                <img src="{{ $shop_item->item_prefab->getImage() }}" alt="Card image cap">
+                                            </div>
+                                        </div>
+
+                                        <div class="card-body d-flex flex-column">
+                                            <h5 class="card-title">{{ $shop_item->item_prefab->name }}</h5>
+                                            <div class="card-text py-2">Tier {{ $shop_item->item_prefab->tier }}</div>
+                                            <div class="card-text pb-2">Price:
+                                                <div class="d-inline-flex price {{ $shop_item->discount > 0 ? 'discounted' : '' }}">{{ $shop->currency->is_front ? $shop->currency->name . $shop_item->price : $shop_item->price . ' ' . $shop->currency->name }}</div>
+                                                @if($shop_item->discount > 0)
+                                                    <div class="d-inline-flex">{{ $shop->currency->is_front ? $shop->currency->name . $shop_item->getPrice() : $shop_item->getPrice() . ' ' . $shop->currency->name }}</div>
+                                                @endif
+                                            </div>
+                                            <button data-item="{{ $shop_item->id }}" class="mt-auto align-bottom btn-block shop_buy_btn btn btn-success }}">Purchase</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
-                @endforeach
+                </div>
+            @endforeach
+        </div>
+
+        <div class="row p-2">
+            @if(count($shops) > 0)
             @endif
         </div>
     </div>

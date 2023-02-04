@@ -1,0 +1,77 @@
+.shop-filter-section {
+    margin: 0 10px;
+
+    .section-title {
+        text-align: center;
+    }
+
+    span {
+        color: #999999;
+        text-align: center;
+    }
+
+    span:before,
+    span:after {
+        background-color: #999999;
+        content: "";
+        display: inline-block;
+        height: 1px;
+        position: relative;
+        vertical-align: middle;
+        width: 50%;
+    }
+
+    span:before {
+        right: 0.5em;
+        margin-left: -50%;
+    }
+
+    span:after {
+        left: 0.5em;
+        margin-right: -50%;
+    }
+}
+
+.ribbon {
+    width: 100px;
+    padding: 2px;
+    background-color: #af2828;
+    position: relative;
+    transform: rotate(-45deg);
+    text-align: center;
+    top: 10px;
+    left: -30px;
+    height: fit-content;
+}
+
+.clear {
+    overflow: hidden;
+    position: relative;
+}
+
+.ribbon-container {
+    position: absolute;
+}
+
+.tab-content > .active {
+    display: flex !important;
+}
+
+.discounted {
+    text-decoration: line-through;
+}
+
+.shop-tab > a {
+    color: white;
+    &:not(.active):hover {
+        &:hover {
+            background-color: #999999;
+            border: none;
+        }
+    }
+}
+
+.reset-date {
+    color: white;
+    font-size: 1.25rem;
+}

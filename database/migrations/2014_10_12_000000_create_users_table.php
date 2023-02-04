@@ -19,7 +19,6 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->unsignedBigInteger('bytecoin')->default(0);
             $table->unsignedBigInteger('money')->default(500);
             $table->rememberToken();
             $table->timestamps();

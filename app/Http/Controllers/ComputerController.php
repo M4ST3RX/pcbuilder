@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Computer;
+use App\CryptoWallet;
+use App\Currency;
 use App\HardwareType;
 use App\Item;
-use App\Player;
+use App\Managers\InventoryManager;
+use App\User;
+use App\Util;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
@@ -16,116 +21,67 @@ class ComputerController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
-    {
-        return redirect('/computers');
-    }
-
     public function selector()
     {
-        $player = Player::where('user_id', Auth::id())->first();
+        $user = User::where('id', Auth::id())->first();
 
-        if(!$player) {
-            $player = new Player();
-            $player->user_id = Auth::id();
-            $player->save();
-        }
-
-        $computers = $player->computers;
+        $computers = $user->computers;
         Session::forget('computer_id');
 
         return view('computer.select')->with(['computers' => $computers]);
     }
 
-    public function play($id)
+    public function play()
     {
+        $id = Session::get('computer_id');
+        if(!$id) return redirect('/');
+
         $computer = Computer::find($id);
-        
-        if($computer->state === 0){
-            Session::flash('message', 'The computer is not turned on.');
-            Session::flash('alert-class', 'alert-danger');
-            return redirect('/computers');
-        }
+        $items = Item::where('computer_id', $id)->get();
+        $inventoryManager = new InventoryManager($items);
 
-        Session::put('computer_id', $id);
-
-        return view('computer.play')->with(['computer' => $computer]);
+        return view('computer.play')->with(['computer' => $computer, 'inventoryManager' => $inventoryManager]);
     }
 
-    public function assembler($id)
+    public function showCreateComputer()
     {
-        $player = Player::where('user_id', Auth::id())->first();
-        $computer = Computer::find($id);
-        if($computer->user_id !== $player->id) return redirect()->back();
-
-        $items = Item::where('user_id', $player->id)->where('computer_id', null)->orWhere('computer_id', $computer->id)->get();
-
-        return view('computer.assembler')->with(['items' => $items, 'computer' => $computer]);
+        return view('computer.create');
     }
 
-    public function add_part($id, $item_id)
+    public function createComputer(Request $request)
     {
-        $computer = Computer::find($id);
-        if($computer->state === 1) {
-            Session::flash('message', 'Turn off the computer!');
+        $name = $request->get('computer-name');
+
+        if(!$request->has('computer-name')) {
+            Session::flash('message', 'Please enter a name!');
             Session::flash('alert-class', 'alert-danger');
-            return redirect('computer/assembler/' . $id);
+            return redirect('/create');
         }
 
-        $itemClass = Item::find($item_id);
-        $data = json_decode($itemClass->hardware->data, true);
-        $hasItem = false;
+        $computer_exists = Computer::where('name', '=', $name)->first() !== null;
 
-        if(isset($data['depends']) && !empty($data['depends'])) {
-            foreach ($computer->items as $item){
-                if(in_array($item->hardware->hardware_type->id, $data['depends'])) {
-                    $hasItem = true;
-                    break;
-                }
-            }
-        }
-
-        if($hasItem || empty($data['depends'])){
-            $itemClass->computer_id = $computer->id;
-            $itemClass->save();
-        } else {
-            $needed = HardwareType::find($data['depends'][0])->type;
-            Session::flash('message', 'The computer needs a '.$needed.' first!');
+        if($computer_exists) {
+            Session::flash('message', 'You already have a computer with this name!');
             Session::flash('alert-class', 'alert-danger');
+            return redirect('/create');
         }
 
-        return redirect('computer/assembler/' . $id);
-    }
-
-    public function remove_part($id, $item_id)
-    {
-        $computer = Computer::find($id);
-        if($computer->state === 1) {
-            Session::flash('message', 'Turn off the computer!');
-            Session::flash('alert-class', 'alert-danger');
-            return redirect('computer/assembler/' . $id);
+        $currencies = Currency::where('is_crypto', true)->get();
+        $currency_array = [];
+        foreach($currencies as $currency) {
+            $currency_array[$currency->id] = 0;
         }
 
-        $item = Item::find($item_id);
+        $CryptoWallet = new CryptoWallet();
+        $CryptoWallet->wallet_hash = Util::createCryptoWalletHash(Computer::max('id'));
+        $CryptoWallet->currencies = json_encode($currency_array);
+        $CryptoWallet->save();
 
-        $item->computer_id = null;
-        $item->save();
-
-        return redirect('computer/assembler/' . $id);
-    }
-
-    public function set_state($computer_id)
-    {
-        $computer = Computer::find($computer_id);
-        if($computer->fully_functional()){
-            $computer->mine_start_time = null;
-            $computer->state = !$computer->state;
-            $computer->save();
-        } else {
-            Session::flash('message', 'You are missing some parts from this computer!');
-            Session::flash('alert-class', 'alert-danger');
-        }
-
-        return redirect('/computers/');
+        $Computer = new Computer();
+        $Computer->user_id = Auth::user()->id;
+        $Computer->crypto_wallet_id = $CryptoWallet->id;
+        $Computer->name = $name;
+        $Computer->save();
+        return redirect('/');
     }
 }

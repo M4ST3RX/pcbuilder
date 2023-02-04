@@ -2,10 +2,13 @@
 
 namespace App\Providers;
 
-use App\ComputerBrand;
-use App\Player;
-use App\Shop;
+use App\Computer;
+use App\CryptoWallet;
+use App\Currency;
+use App\Mine;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -29,8 +32,16 @@ class AppServiceProvider extends ServiceProvider
     {
         view()->composer('layouts.app', function($view)
         {
-            $view->with('player', Player::where('user_id', Auth::id())->first());
-            //$view->with('brands', ComputerBrand::where('bankrupted', false)->get());
+            if(Session::has('computer_id')) {
+                $currencies = [];
+                $computer = Computer::find(Session::get('computer_id'));
+                foreach(json_decode($computer->wallet->currencies, true) as $id => $value) {
+                    $curr = Currency::find($id);
+                    $currencies[$curr->name] = $value;
+                }
+                $view->with('crypto_currencies', $currencies);
+            }
+            $view->with('mines', Mine::all());
         });
     }
 }

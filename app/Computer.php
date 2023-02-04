@@ -4,11 +4,38 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class Computer extends Model
 {
-    protected $casts = [
-        'data' => 'array'
+    public $slots = [
+        [
+            'row' => 1,
+            'slots' => [
+                ['type' => '1'],
+                ['type' => '2'],
+                ['type' => '3'],
+                ['type' => '3'],
+                ['type' => '4'],
+                ['type' => '4'],
+                ['type' => '4'],
+                ['type' => '4']
+            ]
+        ],
+        [
+            'row' => 2,
+            'slots' => [
+                ['type' => '6'],
+                ['type' => '5'],
+                ['type' => '5'],
+                ['type' => '5'],
+                ['type' => '5'],
+                ['type' => '-1'],
+                ['type' => '-1'],
+                ['type' => '-1']
+            ]
+        ]
     ];
 
     public function user()
@@ -16,151 +43,158 @@ class Computer extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function pc_brand()
+    public function wallet()
     {
-        return $this->belongsTo(ComputerBrand::class, 'brand');
+        return $this->hasOne(CryptoWallet::class, 'id', 'crypto_wallet_id');
     }
 
-    public function items()
-    {
-        return $this->hasMany(Item::class, 'computer_id', 'id');
+    public function canPlaceItem($item_id, $slot) {
+        $item = Item::find($item_id);
+
+        return $item->prefab->type === Util::computerSlotToType($slot);
     }
 
-    public function uses_hdd()
+    public function storage_size($display = false)
     {
-        $items = Item::leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
-            ->where('computer_id', $this->id)
-            ->where('computer_hardware.type', 'hdd')
-            ->first();
-        return ($items !== null);
-    }
+        $storageSize = 0;
 
-    public function storage_size()
-    {
-        $storage = Item::select('computer_hardware.data')
-            ->leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
-            ->where('computer_id', $this->id)
-            ->where('computer_hardware.type', 'hdd')
-            ->get();
+        $items = Item::where('computer_id', Session::get('computer_id'))->where('in_computer', true)->get();
 
-        $totalSize = 0;
-        foreach ($storage as $item) {
-            $totalSize += json_decode($item->data)->size;
+        foreach ($items as $item) {
+            if ($item->prefab->type == 4) {
+                $item_data = json_decode($item->data, true);
+                if (!isset($item_data['size'])) continue;
+                $storageSize += $item_data['size'] * ($item_data['quality'] / 100);
+            }
         }
 
-        return (count($storage) > 0) ? Util::formatSizeUnits($totalSize) : 0;
+        return $display ? Util::formatSizeUnits($storageSize) : $storageSize;
     }
 
-    public function storage_speed()
+    public function storage_speed($display = false)
     {
-        $storage = Item::select('computer_hardware.data')
-            ->leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
-            ->where('computer_id', $this->id)
-            ->where('computer_hardware.type', 'hdd')
-            ->orWhere('computer_hardware.type', 'ssd')
-            ->first();
+        $storageSpeed = 0;
+        $numberOfStorage = 0;
 
-        return ($storage) ? json_decode($storage->data)->speed : 0;
+        $items = Item::where('computer_id', Session::get('computer_id'))->where('in_computer', true)->get();
+
+        foreach ($items as $item) {
+            if ($item->prefab->type == 4) {
+                $numberOfStorage++;
+                $item_data = json_decode($item->data, true);
+                if (!isset($item_data['speed'])) continue;
+                $storageSpeed += $item_data['speed'];
+            }
+        }
+
+        $storageSpeed = $numberOfStorage > 0 ? $storageSpeed / $numberOfStorage : $storageSpeed;
+
+        return $display ? Util::formatSizeUnits($storageSpeed) . "/s" : $storageSpeed;
     }
 
-    public function video_power()
+    public function gpu_speed($display = false)
     {
-        $video_card = Item::select('computer_hardware.data')
-            ->leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
-            ->where('computer_id', $this->id)
-            ->where('computer_hardware.type', 'videocard')
-            ->first();
-        return ($video_card) ? Util::formatHertzUnits(json_decode($video_card->data)->speed) : 0;
+        $hash_rate = 0;
+
+        $items = Item::where('computer_id', Session::get('computer_id'))->where('in_computer', true)->get();
+
+        foreach ($items as $item) {
+            if ($item->prefab->type == 3) {
+                $item_data = json_decode($item->data, true);
+                if (!isset($item_data['attributes']['hash_rate'])) continue;
+                $hash_rate += $item_data['attributes']['hash_rate'];
+            }
+        }
+
+        return $display ? Util::formatSizeUnits($hash_rate) : $hash_rate;
     }
 
-    public function current_mined_coins()
+    /**
+     * Calculate mined blocks over a period of time
+     */
+    public function current_mined_blocks($mine_id)
     {
         if($this->mine_start_time == null) return 0;
 
-        $video_card = Item::select('computer_hardware.data')
-            ->leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
-            ->where('computer_id', $this->id)
-            ->where('computer_hardware.type', 'videocard')
-            ->first();
+        $mine = Mine::find($mine_id);
 
-        $diff = Carbon::now()->getTimestamp() - $this->mine_start_time;
+        $diff = Carbon::now()->getTimestamp() - Carbon::createFromFormat('Y-m-d H:i:s', $this->mine_start_time)->getTimestamp();
+        //$ram_capacity = $this->ram_capacity();
+        $mined_blocks = $this->gpu_speed() * $diff / (135000 * $mine->difficulty_level);
 
-        $coins = round($diff / 60, 0, PHP_ROUND_HALF_DOWN);
-        if(Util::formatSize($this->ram_capacity(), 'B') <= $coins * 4096) {
-            $coins = Util::formatSize($this->ram_capacity(), 'B') / 4096;
-        }
+        /*if($mined_coins * $mine->memory_conversion >= $ram_capacity) {
+            $mined_coins = $ram_capacity;
+        }*/
 
-        $bonus = (json_decode($video_card->data)->speed / 100) * $coins;
-
-        return round($coins + $bonus, 0);
+        return floor($mined_blocks);
     }
 
-    public function mine_speed()
+    /**
+     * Calculate mine speed per second
+     */
+    public function mine_speed($mine_id)
     {
-        if($this->mine_start_time == null) return 0;
+        $hash_rate = 0;
+        $num_of_gpu = 0;
 
-        $video_card = Item::select('computer_hardware.data')
-            ->leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
-            ->where('computer_id', $this->id)
-            ->where('computer_hardware.type', 'videocard')
-            ->first();
+        $mine = Mine::find($mine_id);
+        $items = Item::where('computer_id', Session::get('computer_id'))->where('in_computer', true)->get();
 
-        $coins = 1;
-        $bonus = json_decode($video_card->data)->speed / 100 * $coins;
-        return $coins + $bonus;
+        foreach ($items as $item) {
+            if ($item->prefab->type == 3) {
+                $item_data = json_decode($item->data, true);
+                if (!isset($item_data['attributes']['hash_rate'])) continue;
+                $hash_rate += $item_data['attributes']['hash_rate'];
+                $num_of_gpu++;
+            }
+        }
+
+        //$hash_rate = $hash_rate / $num_of_gpu;
+
+        return ($hash_rate * 60) / (135000 * $mine->difficulty_level);
+
+
+
+        return ((($mine->block_reward * 60) / $mine->difficulty_level) / 6480000) * $hash_rate / 60;
     }
 
     public function ram_capacity()
     {
-        $rams = Item::select('computer_hardware.data')
-            ->leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
-            ->where('computer_id', $this->id)
-            ->where('computer_hardware.type', 'ram')
-            ->get();
-
         $totalSize = 0;
-        foreach ($rams as $ram) {
-            $totalSize += json_decode($ram->data)->size;
+        $items = Item::where('computer_id', Session::get('computer_id'))->where('in_computer', true)->get();
+        foreach($items as $item) {
+            if ($item->prefab->type == 5) {
+                $item_data = json_decode($item->data, true);
+                if(!isset($item_data['attributes']['size'])) continue;
+                $totalSize += $item_data['attributes']['size'];
+            }
         }
 
         return $totalSize;
     }
 
-    public function ram_mine_capacity()
+    public function ram_mine_capacity($mine_id)
     {
         $ram_size = $this->ram_capacity();
-        $str = '';
-        if($ram_size === 0) return "0B";
+        $mine = Mine::find($mine_id);
 
-        $str .= Util::formatSizeUnits($ram_size);
+        $mined_blocks = $this->current_mined_blocks($mine_id);
+        $current_mined_bytes = $mined_blocks * $mine->memory_conversion * 20;
+        $percentage = $ram_size === 0 ? 0 : round($current_mined_bytes * 100 / $ram_size, 2);
 
-        if(Util::formatSize($this->ram_capacity(), 'B') < $this->current_mined_coins() * 4096) {
-            $current_mined_bytes = Util::formatSize($this->ram_capacity(), 'B');
-        } else {
-            $current_mined_bytes = $this->current_mined_coins() * 4096;
-        }
-        $percentage = round($current_mined_bytes * 100 / Util::formatSize($ram_size, 'B'), 2);
-
-        $str .= ' / '. Util::formatSizeUnits($current_mined_bytes / 1024 / 1024) . ' (' . $percentage . '%)';
-
-        return $str;
+        return Util::formatSizeUnits($current_mined_bytes) . ' / ' . Util::formatSizeUnits($ram_size) . ' (' . $percentage . '%)';
     }
 
-    public function fully_functional()
+    public function isComplete()
     {
+        $items = Item::where('computer_id', $this->id)->where('in_computer', true)->get();
         $array = [];
-        $items = Item::select('hardware_types.type')
-            ->leftJoin('computer_hardware', 'items.computer_hardware_id', '=', 'computer_hardware.id')
-            ->leftJoin('hardware_types', 'computer_hardware.hardware_type_id', '=', 'hardware_types.id')
-            ->where('computer_id', $this->id)
-            ->get();
 
         foreach ($items as $item) {
-            $array[] = $item->type;
+            $array[] = $item->prefab->type;
         }
 
-        if((in_array('Hard Disk Drive', $array) || in_array('Solid State Drive', $array)) && in_array('Motherboard', $array)
-            && in_array('RAM', $array) && in_array('Video Card', $array) && in_array('CPU', $array)) return true;
+        if((in_array(1, $array) && in_array(2, $array)) && in_array(3, $array) && in_array(4, $array) && in_array(5, $array) && in_array(6, $array)) return true;
         return false;
     }
 }

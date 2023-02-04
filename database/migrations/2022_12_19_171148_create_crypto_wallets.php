@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddCompanyRankIdToPlayersTable extends Migration
+class CreateCryptoWallets extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddCompanyRankIdToPlayersTable extends Migration
      */
     public function up()
     {
-        Schema::table('players', function (Blueprint $table) {
-            $table->unsignedBigInteger('company_rank_id')->after('company_id')->nullable();
+        Schema::create('crypto_wallets', function (Blueprint $table) {
+            $table->id();
+            $table->string('wallet_hash');
+            $table->json('currencies')->default(json_encode([]));
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AddCompanyRankIdToPlayersTable extends Migration
      */
     public function down()
     {
-        Schema::table('players', function (Blueprint $table) {
-            $table->dropColumn(['company_rank_id']);
-        });
+        Schema::dropIfExists('crypto_wallets');
     }
 }
