@@ -19,10 +19,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($employees as $player)
+                                @foreach($employees as $employee)
                                     <tr>
-                                        <td colspan="2">{{ $player->auth->username }}</td>
-                                        <td colspan="2">{{ $player->company_rank->name }}</td>
+                                        <td colspan="2">{{ $employee->auth->username }}</td>
+                                        <td colspan="2">{{ $employee->company_rank->name }}</td>
                                         <td>
                                             <a href="" class="btn btn-primary" data-toggle="modal" data-target="#editModal" role="button">Rename</a>
                                             <a href="" class="btn btn-danger" role="button">Delete</a>

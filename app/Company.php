@@ -13,6 +13,6 @@ class Company extends Model
 
     public function employees()
     {
-        return $this->hasMany(Player::class);
+        return $this->hasMany(User::class);
     }
 }

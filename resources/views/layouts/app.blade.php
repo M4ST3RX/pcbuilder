@@ -22,7 +22,7 @@
 <body style="background-color: #4f4f4f">
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-dark shadow-sm" style="background-color: #4f4f4f">
-            <a class="navbar-brand" href="{{ (session('computer_id')) ? '/computer/play/' . session('computer_id') : url('/') }}">
+            <a class="navbar-brand" href="{{ route('computer_select') }}">
                 {{ config('app.name', 'Laravel') }}
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -33,37 +33,28 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav mr-auto">
                     @auth
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('computers') }}">{{ __('Warehouse') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            {{--<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>--}}
-                                {{--Shops <span class="caret"></span>--}}
-                            {{--</a>--}}
-
-                            <a class="nav-link" href="{{ route('shop') }}">{{ __('Shop') }}</a>
-                            {{--<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">--}}
-                                {{--<a class="nav-link" href="{{ route('shop.local') }}">{{ __('Local Electronic Shop') }}</a>--}}
-                                {{--<div class="btn-group dropright">--}}
-                                    {{--<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">--}}
-                                        {{--Manufacturer's Shop--}}
-                                    {{--</button>--}}
-                                    {{--<div class="dropdown-menu">--}}
-                                        {{--<a class="nav-link" href="{{ route('shop.manufacturer.') }}">{{ __('Local Electronic Shop') }}</a>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-
-                            {{--</div>--}}
-                        </li>
                         @if(\Illuminate\Support\Facades\Session::get('computer_id'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('computer.play') }}">{{ __('My Computer') }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('shop') }}">{{ __('Shop') }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('computer.inventory') }}">{{ __('Inventory') }}</a>
+                            </li>
+                            @if(count($mines) > 0)
                             <li class="nav-item dropdown">
                                 <a id="programsDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ __('Programs') }} <span class="caret"></span>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="programsDropdown">
-                                    <a class="dropdown-item" href="{{ route('programs.byteminer') }}">{{ __('ByteMiner') }}</a>
+                                    @foreach($mines as $mine)
+                                        <a class="dropdown-item" href="{{ route('programs.miner', strtolower($mine->name)) }}">{{ __($mine->name) }}</a>
+                                    @endforeach
                                 </div>
                             </li>
+                            @endif
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('company.index') }}">{{ __('Company') }}</a>
                             </li>
@@ -84,9 +75,22 @@
                             </li>
                         @endif
                     @else
-                        <li class="nav-item">
-                            <a class="nav-link" style="cursor: default">${{ number_format($player->money / 100, 2, '.', ' ') }}</a>
+                        @if(isset($crypto_currencies))
+                        <li class="nav-item dropdown balance-dropdown">
+                            <a id="balanceDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                {{ Auth::user()->getBalance() }}
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="balanceDropdown">
+                                @foreach($crypto_currencies as $currency => $value)
+                                    <a class="dropdown-item" href="#" disabled>{{ number_format($value, 4) . ' ' . $currency }}</a>
+                                @endforeach
+                            </div>
                         </li>
+                        @else
+                        <li class="nav-item">
+                            <a class="nav-link" style="cursor: default">{{ Auth::user()->getBalance() }}</a>
+                        </li>
+                        @endif
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 {{ Auth::user()->username }} <span class="caret"></span>
@@ -112,6 +116,9 @@
         <main class="py-4">
             @yield('content')
         </main>
+
+
+        @include('modals.modals')
     </div>
 </body>
 </html>

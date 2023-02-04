@@ -15,11 +15,12 @@ class CreateComputersTable extends Migration
     {
         Schema::create('computers', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('crypto_wallet_id');
             $table->unsignedBigInteger('user_id');
             $table->string('name');
-            $table->unsignedBigInteger('brand');
-            $table->longText('data');
-            $table->boolean('state');
+            $table->unsignedBigInteger('level')->default(1);
+            $table->dateTime('mine_start_time')->nullable();
+            $table->unsignedBigInteger('mine_id')->nullable();
             $table->timestamps();
         });
     }

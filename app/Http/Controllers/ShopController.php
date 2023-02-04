@@ -3,13 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Computer;
+use App\ComputerBrand;
 use App\ComputerHardware;
+use App\HardwareType;
 use App\Item;
-use App\Player;
+use App\ItemGenerator;
+use App\Managers\InventoryManager;
+use App\Shop;
+use App\ShopItem;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Session;
 
 class ShopController extends Controller
 {
@@ -20,38 +25,48 @@ class ShopController extends Controller
 
     public function index()
     {
-        $products = ComputerHardware::where('listed', true)->get();
+        if(!Session::has('computer_id')) return redirect('computer_select');
 
-        return view('shop.view')->with(['products' => $products]);
+        $shops = Shop::where('enabled', true)->get();
+        $balance = 0;
+
+        return view('shop.view')->with(['shops' => $shops, 'balance' => $balance]);
     }
 
-    public function purchase($id)
+    public function purchase(Request $request)
     {
-        $product = ComputerHardware::find($id);
-        $user = Player::where('user_id', Auth::id())->first();
+        $shop_item = ShopItem::find($request->item);
+        $computer = Computer::find(Session::get('computer_id'));
+        $user = User::find(Auth::id());
+        $inventoryManager = new InventoryManager();
+        $itemPrefab = $shop_item->item_prefab;
 
-        if(!$product->listed) return redirect('/shop');
+        $price = $shop_item->price;
+        $balance = $shop_item->shop->currency_id == 1 ? $user->money : $computer->wallet->getBalance($shop_item->shop->currency_id);
 
-        if($user->money >= $product->price) {
-            $user->money = $user->money - $product->price;
-            $user->save();
-
-            if($product->hardware_type->type == 'Case') {
-                $computer = new Computer();
-                $computer->user_id = $user->id;
-                $computer->name = 'Computer';
-                $computer->brand = 1;
-                $computer->data = json_encode(['case' => $product->id]);
-                $computer->state = 0;
-                $computer->save();
-            } else {
-                $item = new Item();
-                $item->user_id = $user->id;
-                $item->computer_hardware_id = $id;
-                $item->save();
-            }
+        if(!$inventoryManager->hasSpace()) {
+            return json_encode(['error' => true, 'message' => 'You don\'t have enough space in your inventory.', 'title' => 'Shop']);
         }
 
-        return redirect('/shop');
+        if($balance >= $price) {
+            if($shop_item->discount > 0) {
+                $price = round($shop_item->price * ((100 - $shop_item->discount) / 100), 2);
+            }
+
+            if($shop_item->shop->currency_id == 1) {
+                $user->money -= $price * 100;
+                $user->save();
+            } else {
+                $computer->wallet->takeBalance($price);
+                $computer->wallet->save();
+            }
+
+            $ItemGenerator = new ItemGenerator();
+            $ItemGenerator->createItem($itemPrefab->tier, $itemPrefab->rarity, $itemPrefab->type);
+        } else {
+            return json_encode(['error' => true, 'message' => 'You don\'t have enough money.', 'title' => 'Shop']);
+        }
+
+        return json_encode(['error' => false, 'message' => 'You have purchased the item <span class="item-name">' . $shop_item->item_prefab->name . '</span>', 'title' => 'Shop']);
     }
 }

@@ -15,6 +15,11 @@ class CreateShopsTable extends Migration
     {
         Schema::create('shops', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('type');
+            $table->string('name');
+            $table->unsignedBigInteger('currency_id');
+            $table->boolean('enabled')->default(false);
+            $table->dateTime('reset_date');
             $table->timestamps();
         });
     }

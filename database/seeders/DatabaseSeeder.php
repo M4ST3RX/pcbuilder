@@ -1,5 +1,9 @@
 <?php
 
+use Database\Seeders\CurrencySeed;
+use Database\Seeders\ItemPrefabSeed;
+use Database\Seeders\ItemSeed;
+use Database\Seeders\MineSeed;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -11,9 +15,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(HardwareTypesSeed::class);
-        $this->call(HardwareSeed::class);
-        $this->call(ComputerBrandSeed::class);
-        $this->call(CompanyTypeSeeder::class);
+        $this->call(ItemPrefabSeed::class);
+        $this->call(ItemSeed::class);
+        $this->call(CurrencySeed::class);
+        $this->call(MineSeed::class);
+        $this->call(ShopSeed::class);
     }
 }

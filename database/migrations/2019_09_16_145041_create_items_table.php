@@ -15,9 +15,14 @@ class CreateItemsTable extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('computer_hardware_id');
-            $table->unsignedBigInteger('computer_id')->nullable();
+            $table->unsignedBigInteger('computer_id');
+            $table->unsignedBigInteger('item_prefab_id');
+            $table->json('data');
+            $table->boolean('in_computer')->default(false);
+            $table->integer('slot')->nullable();
+            $table->integer('quality')->nullable();
+            $table->integer('level')->nullable();
+            $table->timestamps();
         });
     }
 
