@@ -1,32 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container bg-dark">
-        <div class="row">
-            <div class="col-md-12 py-3">
-                <div class="inventory">
-                    <div class="inventory-container">
-                        <div class="title">
-                            Inventory
-                        </div>
-                        <div class="inventory-items">
-                            @for($i = 0; $i < App\Managers\InventoryManager::$MAX_SLOTS; $i++)
-                                @php
-                                    $item = $inventoryManager->getItemAt($i);
-                                @endphp
-                                <x-item :item="$item" :slot-id="$i"/>
-                            @endfor
-                        </div>
-                    </div>
-                </div>
+    <div class="container bg-dark h-100">
+        <div class="row h-100">
+            <div class="col-md-3 inventory-list h-100">
+                @foreach ($inventoryManager->getItems() as $item)
+                    <x-list-item :item="$item"></x-list-item>
+                @endforeach
             </div>
-            {{-- <div class="col-md-2">
-                <div class="d-flex flex-column computer-stat-column">
-                    <x-computer-stat title="Storage Size">{{ $computer->storage_size(true) }}</x-computer-stat>
-                    <x-computer-stat title="Storage Speed">{{ $computer->storage_speed(true) }}</x-computer-stat>
-                    <x-computer-stat title="GPU Speed">{{ $computer->gpu_speed(true) }}</x-computer-stat>
-                </div>
-            </div> --}}
+            <div class="col-md-9">
+            </div>
         </div>
     </div>
     @foreach($inventoryManager->getItems() as $item)
