@@ -13,10 +13,48 @@
                     <div class="col-md-6">
                         <div class="rounded m-4 mb-5" style="border: 1px solid white">
                             <div class="m-2">
-                                <h1>cim</h1>
+                                <div class="oc-title">Repair</div>
                             </div>
                             <div class="m-2">
-                                <input type="range" class="custom-range" id="customRange" name="points1">
+                                <div class="oc-text">
+                                    Price:
+                                    <div class="d-inline-flex oc-price ">${{rand(100,300)}}</div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <div class="m-2">
+                                    <button type="submit" class="btn btn-danger">Scrap</button>
+                                </div>
+                                <div class="m-2">
+                                    <button type="submit" class="btn btn-primary">Repair</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="rounded m-4 mb-5" style="border: 1px solid white">
+                            <div class="m-2">
+                                <div class="oc-title">Boost</div>
+                            </div>
+                            <div class="m-2">
+                                <input type="range" class="custom-range">
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <div class="m-2">
+                                    <button type="submit" class="btn btn-primary">Boost</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="rounded m-4 mb-5" style="border: 1px solid white">
+                            <div class="m-2">
+                                <div class="oc-title">title</div>
+                            </div>
+                            <div class="m-2">
+                                <input type="range" class="custom-range" name="points1">
                             </div>
 
                             <div class="d-flex justify-content-end">
@@ -29,42 +67,10 @@
                     <div class="col-md-6">
                         <div class="rounded m-4 mb-5" style="border: 1px solid white">
                             <div class="m-2">
-                                <h1>cim</h1>
+                                <div class="oc-title">title</div>
                             </div>
                             <div class="m-2">
-                                <input type="range" class="custom-range" id="customRange" name="points1">
-                            </div>
-
-                            <div class="d-flex justify-content-end">
-                                <div class="m-2">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="rounded m-4 mb-5" style="border: 1px solid white">
-                            <div class="m-2">
-                                <h1>cim</h1>
-                            </div>
-                            <div class="m-2">
-                                <input type="range" class="custom-range" id="customRange" name="points1">
-                            </div>
-
-                            <div class="d-flex justify-content-end">
-                                <div class="m-2">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="rounded m-4 mb-5" style="border: 1px solid white">
-                            <div class="m-2">
-                                <h1>cim</h1>
-                            </div>
-                            <div class="m-2">
-                                <input type="range" class="custom-range" id="customRange" name="points1">
+                                <input type="range" class="custom-range" name="points1">
                             </div>
 
                             <div class="d-flex justify-content-end">

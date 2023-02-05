@@ -11116,6 +11116,16 @@ div[data-rarity=master] {
   }
 }
 
+.oc-title {
+  font-size: 2rem;
+  color: white;
+}
+
+.oc-text {
+  color: white;
+  font-size: 1rem;
+}
+
 /* width */
 
 ::-webkit-scrollbar {
