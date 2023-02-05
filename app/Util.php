@@ -98,6 +98,16 @@ class Util extends Model
         return $power . " W";
     }
 
+    public static function formatDiskSpeed($speed)
+    {
+        return $speed . " RPM";
+    }
+
+    public static function formatMemorySpeed($speed)
+    {
+        return $speed . " MHz";
+    }
+
     public static function createCryptoWalletHash($id) {
         $salt = "e1ebadabbac7543d5369a746b4f3835a_";
         $wallet = hash('sha256',  $salt . $id);
@@ -249,34 +259,34 @@ class Util extends Model
         $weight = 0;
         switch ($type) {
             case 2:
-                $weight = 0.5;
+                $weight = 0.25;
                 break;
             case 3:
-                $weight = 1;
+                $weight = 1.5;
                 break;
         }
 
         switch ($rarity) {
             default:
             case 1:
-                $min = 250;
-                $max = 450;
-                break;
-            case 2:
-                $min = 400;
-                $max = 700;
-                break;
-            case 3:
-                $min = 600;
-                $max = 950;
-                break;
-            case 4:
-                $min = 800;
+                $min = 950;
                 $max = 1150;
                 break;
+            case 2:
+                $min = 1100;
+                $max = 1400;
+                break;
+            case 3:
+                $min = 1300;
+                $max = 1750;
+                break;
+            case 4:
+                $min = 1500;
+                $max = 1850;
+                break;
             case 5:
-                $min = 1000;
-                $max = 1350;
+                $min = 1700;
+                $max = 2050;
                 break;
         }
 
@@ -316,5 +326,57 @@ class Util extends Model
         $max *= pow(2, $tier) * 0.5;
 
         return ['min' => round($min), 'max' => round($max)];
+    }
+
+    public static function getMemorySpeed($tier, $rarity) {
+        switch ($rarity) {
+            default:
+            case 1:
+                $speed = 1400;
+                break;
+            case 2:
+                $speed = 1750;
+                break;
+            case 3:
+                $speed = 2000;
+                break;
+            case 4:
+                $speed = 2250;
+                break;
+            case 5:
+                $speed = 2500;
+                break;
+        }
+
+        $speed *= pow(2, $tier) * 0.5;
+
+        return $speed;
+    }
+
+    public static function getDiskSpeed($tier, $rarity)
+    {
+        return 7200;
+        switch ($rarity) {
+            default:
+            case 1:
+                $speed = 1400;
+                break;
+            case 2:
+                $speed = 1750;
+                break;
+            case 3:
+                $speed = 2000;
+                break;
+            case 4:
+                $speed = 2250;
+                break;
+            case 5:
+                $speed = 2500;
+                break;
+        }
+
+        $speed *= pow(2, $tier) * 0.5;
+
+        return $speed;
     }
 }

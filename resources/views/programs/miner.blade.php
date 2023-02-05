@@ -17,8 +17,8 @@
 
                     <div class="card-body">
                         <p>Total {{ $mine->currency->name }}: {{ $computer->wallet->getBalance($mine->currency_id) }} <button role="button" style="margin-left: 10px" class="btn btn-sm btn-primary miner_sell{{ ($converted_balance < 5) ? ' disabled' : '' }}">Sell - ${{ number_format($converted_balance, 2, '.', ' ') }}</button></p>
-                        <p>Mined Blocks: {{ number_format($computer->current_mined_blocks($mine->id)) }}</p>
-                        <p>Mine Speed: {{ number_format($computer->mine_speed($mine->id), 2) . ' blocks / minute' }}</p>
+                        <p>Mined Blocks: {{ number_format($computer->getMinedBlocks($mine->id)) }}</p>
+                        <p>Mine Speed: {{ number_format($computer->getMiningSpeed($mine->id), 2) . ' blocks / minute' }}</p>
                         <p>RAM capacity: {{ $computer->ram_mine_capacity($mine->id) }}</p>
                     </div>
                     <div class="card-footer">

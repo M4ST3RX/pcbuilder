@@ -33,6 +33,7 @@ class ItemGenerator extends Model
         $this->item->in_computer = false;
         $this->item->slot = $this->inventoryManager->getNextAvailableSlot();
         $this->item->quality = isset($override_data['quality']) ? $override_data['quality'] : $this->randomQuality($tier, $rarity);
+        $this->item->durability = isset($override_data['durability']) ? $override_data['durability'] : 100;
         $this->item->level = 1;
         $this->item->tier = $tier;
         $this->item->rarity = $rarity;
@@ -59,6 +60,12 @@ class ItemGenerator extends Model
                 case 'cores':
                     $range = Util::getCoresQualityRange($tier, $rarity);
                     $data['attributes'][$attribute] = round(($this->item->quality / 100) * ($range['max'] - $range['min']) + $range['min'], 0);
+                    break;
+                case 'disk_speed':
+                    $data['attributes'][$attribute] = Util::getDiskSpeed($tier, $rarity);
+                    break;
+                case 'memory_speed':
+                    $data['attributes'][$attribute] = Util::getMemorySpeed($tier, $rarity);
                     break;
                 default:
                     $data['attributes'][$attribute] = 0;
@@ -108,15 +115,15 @@ class ItemGenerator extends Model
             case 1:
                 return ['power_usage'];
             case 2:
-                return ['cores', 'hash_rate', 'power_usage'];
+                return ['cores', 'hash_rate', 'heat', 'power_usage'];
             case 3:
-                return ['hash_rate', 'power_usage'];
+                return ['hash_rate', 'heat', 'power_usage'];
             case 4:
-                return ['size', 'power_usage'];
+                return ['size', 'disk_speed', 'power_usage'];
             case 5:
-                return ['size', 'power_usage'];
+                return ['size', 'memory_speed', 'power_usage'];
             case 6:
-                return ['power'];
+                return ['power', 'heat'];
             default:
                 return [''];
         }

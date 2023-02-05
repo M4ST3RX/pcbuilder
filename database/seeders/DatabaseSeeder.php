@@ -1,9 +1,9 @@
 <?php
 
 use Database\Seeders\CurrencySeed;
-use Database\Seeders\ItemPrefabSeed;
 use Database\Seeders\ItemSeed;
 use Database\Seeders\MineSeed;
+use Database\Seeders\ShopSeed;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder

@@ -41,7 +41,7 @@
                                 <a class="nav-link" href="{{ route('shop') }}">{{ __('Shop') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('computer.inventory') }}">{{ __('Inventory') }}</a>
+                                <a class="nav-link" href="{{ route('computer.overclock') }}">{{ __('Overclock') }}</a>
                             </li>
                             @if(count($mines) > 0)
                             <li class="nav-item dropdown">

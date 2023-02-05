@@ -18,4 +18,11 @@ final class ItemType extends Enum
     const MEMORY = 5;
     const POWER_SUPPLY = 6;
 
+    public static function getDescription(mixed $value): string
+    {
+        $key = self::getKey($value);
+        $key = str_replace('_', ' ', strtolower($key));
+        return ucwords($key);
+    }
+
 }

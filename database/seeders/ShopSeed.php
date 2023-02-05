@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Shop;
 use App\ShopItem;
 use Carbon\Carbon;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ShopSeed extends Seeder
@@ -23,12 +24,15 @@ class ShopSeed extends Seeder
             'reset_date' => Carbon::now()->endOfDay()
         ]);
 
-        for($i = 0; $i < 8; $i++) {
+        for ($i = 0; $i < 8; $i++) {
             ShopItem::updateOrCreate(['id' => $i + 1], [
                 'shop_id' => $shop->id,
-                'item_prefab_id' => rand(1, 120),
+                'data' => json_encode([]),
                 'price' => rand(30, 400),
-                'discount' => rand(0, 100) < 5 ? rand(5, 30) : 0
+                'discount' => rand(0, 100) < 5 ? rand(5, 30) : 0,
+                'type' => rand(1, 6),
+                'tier' => rand(1, 4),
+                'rarity' => rand(1, 5)
             ]);
         }
 
@@ -42,9 +46,12 @@ class ShopSeed extends Seeder
         for ($i = 8; $i < 16; $i++) {
             ShopItem::updateOrCreate(['id' => $i + 1], [
                 'shop_id' => $shop->id,
-                'item_prefab_id' => rand(1, 120),
+                'data' => json_encode([]),
                 'price' => rand(30, 400),
-                'discount' => rand(0, 100) < 5 ? rand(15, 50) : 0
+                'discount' => rand(0, 100) < 5 ? rand(15, 50) : 0,
+                'type' => rand(1, 6),
+                'tier' => rand(1, 4),
+                'rarity' => rand(1, 5)
             ]);
         }
     }

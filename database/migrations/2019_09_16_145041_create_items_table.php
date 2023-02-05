@@ -20,10 +20,13 @@ class CreateItemsTable extends Migration
             $table->boolean('in_computer')->default(false);
             $table->integer('slot')->nullable();
             $table->integer('quality')->nullable();
+            $table->integer('durability');
             $table->integer('level')->nullable();
             $table->integer('tier');
             $table->integer('rarity');
             $table->integer('type');
+            $table->boolean('is_overclockable')->default(0);
+            $table->float('overclock_value')->default(1);
             $table->timestamps();
         });
     }

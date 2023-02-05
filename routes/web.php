@@ -25,7 +25,7 @@ Route::prefix('computer')
     ->group(function () {
     // GET
     Route::get('/', 'ComputerController@play')->name('play');
-    Route::get('inventory', 'ComputerController@inventory')->name('inventory');
+    Route::get('overclock', 'ComputerController@showOverclock')->name('overclock');
     Route::get('assembler/{computer_id}', 'ComputerController@assembler')->name('assembler');
     Route::get('state/{computer_id}', 'ComputerController@set_state')->name('state');
     Route::get('add-part/{computer_id}/{item_id}', 'ComputerController@add_part')->name('add-part');

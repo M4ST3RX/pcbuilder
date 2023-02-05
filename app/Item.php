@@ -10,27 +10,44 @@ use App\Util;
 
 class Item extends Model
 {
-    public function getItemLevel() {
+    public function getLevel() {
         $data = json_decode($this->data, true);
         return "Level " . (isset($data['level']) ? $data['level'] : "N/A");
     }
 
+    public function getName()
+    {
+        return ItemTier::getDescription($this->tier) . " " . ItemRarity::getDescription($this->rarity) . ($this->rarity == 1 ? "" : " ") . ItemType::getDescription($this->type);
+    }
+
+    public function getRarity($display = false)
+    {
+        return $display ? ItemRarity::getDescription($this->rarity) : strtolower(ItemRarity::getKey($this->rarity));
+    }
+
     public function getImage() {
         switch($this->type) {
-            case 1:
+            case ItemType::MOTHERBOARD:
                 $image = 'motherboard.png';
-            case 2:
+                break;
+            case ItemType::PROCESSOR:
                 $image = 'processor.png';
-            case 3:
+                break;
+            case ItemType::GRAPHICS_CARD:
                 $image = 'graphics_card.png';
-            case 4:
+                break;
+            case ItemType::HARD_DRIVE:
                 $image = 'hard_drive.png';
-            case 5:
+                break;
+            case ItemType::MEMORY:
                 $image = 'memory.png';
-            case 6:
+                break;
+            case ItemType::POWER_SUPPLY:
                 $image = 'power_supply.png';
+                break;
             default:
                 $image = '';
+                break;
         }
         return asset('storage/images/items/' . $image);
     }
@@ -69,6 +86,12 @@ class Item extends Model
                 case "hash_rate":
                     $value = Util::formatHashRate($value);
                     break;
+                case "disk_speed":
+                    $value = Util::formatDiskSpeed($value);
+                    break;
+                case "memory_speed":
+                    $value = Util::formatMemorySpeed($value);
+                    break;
                 case "cores":
                     $value = $value;
                     break;
@@ -80,16 +103,5 @@ class Item extends Model
         }
 
         return $attribute_string;
-    }
-
-    public function getName()
-    {
-        ItemTier::getDescription($this->tier) . " " . ItemRarity::getDescription($this->rarity) . " " . ItemType::getDescription($this->type);
-
-    }
-
-    public function getRarity($display = false)
-    {
-        return $display ? ItemRarity::getDescription($this->rarity) : strtolower(ItemRarity::getKey($this->rarity));
     }
 }

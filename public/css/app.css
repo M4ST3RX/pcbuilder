@@ -10841,27 +10841,27 @@ a.text-dark:focus {
   vertical-align: middle;
 }
 
-div[data-rarity=common] {
+div[data-rarity=normal] {
   background: radial-gradient(#9B9D9B, #474947);
   border: 2px solid #9B9D9B;
 }
 
-div[data-rarity=exceptional] {
+div[data-rarity=plus] {
   background: radial-gradient(#36F817, #1B7C0B);
   border: 2px solid #36F817;
 }
 
-div[data-rarity=modern] {
+div[data-rarity=pro] {
   background: radial-gradient(#1784F8, #0B427C);
   border: 2px solid #1784F8;
 }
 
-div[data-rarity=advanced] {
+div[data-rarity=elite] {
   background: radial-gradient(#C517F8, #630B7C);
   border: 2px solid #C517F8;
 }
 
-div[data-rarity=unique] {
+div[data-rarity=master] {
   background: radial-gradient(#F8BF17, #7C600B);
   border: 2px solid #F8BF17;
 }
@@ -10986,7 +10986,7 @@ div[data-rarity=unique] {
 }
 
 .computer-slot-empty[data-placeholder="2"] {
-  background-image: url("/storage/images/placeholders/cpu_placeholder.png");
+  background-image: url("/storage/images/placeholders/processor_placeholder.png");
 }
 
 .computer-slot-empty[data-placeholder="3"] {

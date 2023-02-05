@@ -48,6 +48,15 @@ class ComputerController extends Controller
         return view('computer.create');
     }
 
+    public function showOverclock() {
+        $id = Session::get('computer_id');
+        if (!$id) return redirect('/');
+
+        $items = Item::where('computer_id', $id)->get();
+        $inventoryManager = new InventoryManager($items);
+        return view('computer.overclock')->with(['inventoryManager' => $inventoryManager]);
+    }
+
     public function createComputer(Request $request)
     {
         $name = $request->get('computer-name');

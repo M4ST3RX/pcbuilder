@@ -141,11 +141,12 @@ class APIController extends Controller
             $computer->mine_start_time = $current_time->format('Y-m-d H:i:s');
             $computer->mine_id = $mine->id;
         } else {
-            $balance = (rand(80, 120) / 100) * $computer->current_mined_blocks($mine->id) / 1480;
+            $balance = (rand(80, 120) / 100) * $computer->getMinedBlocks($mine->id) / 1480;
             $computer->wallet->addBalance($mine->currency_id, $balance);
             $computer->wallet->save();
             $computer->mine_start_time = null;
             $computer->mine_id = null;
+            $computer->updateDurability();
         }
 
         $computer->save();

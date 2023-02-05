@@ -4,19 +4,6 @@
     <div class="container bg-dark">
         <div class="row">
             <div class="col-md-12 py-3">
-                @php
-                    $index = 0;
-                @endphp
-                @foreach($computer->slots as $row)
-                <div class="d-flex justify-content-center mb-2 computer-items">
-                    @foreach($row["slots"] as $slot)
-                        <x-item :slot-id="$index" :item="$inventoryManager->getItemAt($index, true)" :placeholder="$slot['type']"></x-item>
-                        @php
-                            $index++;
-                        @endphp
-                    @endforeach
-                </div>
-                @endforeach
                 <div class="inventory">
                     <div class="inventory-container">
                         <div class="title">

@@ -24,7 +24,7 @@ final class ItemRarity extends Enum
             case self::NORMAL:
                 return "";
             default:
-                return self::getKey($value);
+                return ucfirst(strtolower(self::getKey($value)));
 
         }
     }

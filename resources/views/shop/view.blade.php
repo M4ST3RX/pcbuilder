@@ -15,7 +15,7 @@
                         <div class="reset-date pb-2">Ends in: <div class="reset-datetime d-inline-flex"></div></div>
                         <div class="row">
                             @foreach($shop->items as $shop_item)
-                                <div class="col-md-3 col-lg-3 mb-4 d-flex" data-type="{{ $shop_item->item_prefab->type }}">
+                                <div class="col-md-3 col-lg-3 mb-4 d-flex" data-type="{{ $shop_item->type }}">
                                     <div class="card card-bg-dark flex-grow-1">
                                         <div class="clear">
                                             @if($shop_item->discount > 0)
@@ -23,14 +23,14 @@
                                                 <div class="ribbon">{{ '-' . $shop_item->discount . '%' }}</div>
                                             </div>
                                             @endif
-                                            <div class="card-img-top d-flex justify-content-center" data-rarity="{{ $shop_item->item_prefab->getRarity(false) }}">
-                                                <img src="{{ $shop_item->item_prefab->getImage() }}" alt="Card image cap">
+                                            <div class="card-img-top d-flex justify-content-center" data-rarity="{{ $shop_item->getRarity(false) }}">
+                                                <img src="{{ $shop_item->getImage() }}" alt="Card image cap">
                                             </div>
                                         </div>
 
                                         <div class="card-body d-flex flex-column">
-                                            <h5 class="card-title">{{ $shop_item->item_prefab->name }}</h5>
-                                            <div class="card-text py-2">Tier {{ $shop_item->item_prefab->tier }}</div>
+                                            <h5 class="card-title">{{ $shop_item->getName() }}</h5>
+                                            <div class="card-text py-2">Tier {{ $shop_item->tier }}</div>
                                             <div class="card-text pb-2">Price:
                                                 <div class="d-inline-flex price {{ $shop_item->discount > 0 ? 'discounted' : '' }}">{{ $shop->currency->is_front ? $shop->currency->name . $shop_item->price : $shop_item->price . ' ' . $shop->currency->name }}</div>
                                                 @if($shop_item->discount > 0)
