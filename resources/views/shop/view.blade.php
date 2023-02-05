@@ -30,7 +30,6 @@
 
                                         <div class="card-body d-flex flex-column">
                                             <h5 class="card-title">{{ $shop_item->getName() }}</h5>
-                                            <div class="card-text py-2">Tier {{ $shop_item->tier }}</div>
                                             <div class="card-text pb-2">Price:
                                                 <div class="d-inline-flex price {{ $shop_item->discount > 0 ? 'discounted' : '' }}">{{ $shop->currency->is_front ? $shop->currency->name . $shop_item->price : $shop_item->price . ' ' . $shop->currency->name }}</div>
                                                 @if($shop_item->discount > 0)
@@ -46,11 +45,6 @@
                     </div>
                 </div>
             @endforeach
-        </div>
-
-        <div class="row p-2">
-            @if(count($shops) > 0)
-            @endif
         </div>
     </div>
 @endsection

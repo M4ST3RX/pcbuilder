@@ -19,8 +19,8 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-<body style="background-color: #4f4f4f">
-    <div id="app">
+<body style="background-color: #4f4f4f; height: 100vh; padding: 0; margin: 0;">
+    <div id="app" class="h-100 d-flex flex-column align-items-stretch">
         <nav class="navbar navbar-expand-md navbar-dark shadow-sm" style="background-color: #4f4f4f">
             <a class="navbar-brand" href="{{ route('computer_select') }}">
                 {{ config('app.name', 'Laravel') }}
@@ -113,8 +113,10 @@
             </div>
         </nav>
 
-        <main class="py-4">
-            @yield('content')
+        <main class="flex-grow-1 d-flex align-items-center">
+            <div class="container h-100" style="max-height: 90vh; overflow: hidden;">
+                @yield('content')
+            </div>
         </main>
 
 

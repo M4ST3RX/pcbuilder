@@ -8,22 +8,6 @@
 @import '~bootstrap/scss/bootstrap';
 @import 'shop';
 
-body {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    min-width: 100vh;
-    overflow: hidden;
-}
-
-.navbar {
-    height: 6vh;
-}
-
-main {
-    height: 94vh;
-}
-
 .computers {
     margin-top: 50px;
 }
@@ -386,7 +370,7 @@ div[data-rarity="master"] {
 
 .item-list-container {
     color: white;
-    padding: 0.25rem;
+    padding: 0.25rem 0.75rem;
 
     .item-img {
         margin-right: 0.5rem;
@@ -394,18 +378,6 @@ div[data-rarity="master"] {
 
     .item-stats {
         padding-left: 0.25rem;
-    }
-}
-
-@media (min-width: 1300px) {
-    .container {
-        max-width: 1200px;
-    }
-}
-
-@media (min-width: 1700px) {
-    .container {
-        max-width: 1600px;
     }
 }
 
