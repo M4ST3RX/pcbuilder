@@ -3,8 +3,8 @@
 @section('content')
     <div class="container bg-dark">
         <div class="row">
-            <div class="col-md-12 py-3">
-                <div class="inventory">
+            <div class="col-md-3">
+                {{-- <div class="inventory">
                     <div class="inventory-container">
                         <div class="title">
                             Inventory
@@ -18,16 +18,87 @@
                             @endfor
                         </div>
                     </div>
+                </div> --}}
+                <h1>inventory</h1>
+            </div>
+
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="rounded m-4 mb-5" style="border: 1px solid white">
+                            <div class="m-2">
+                                <h1>cim</h1>
+                            </div>
+                            <div class="m-2">
+                                <input type="range" class="custom-range" id="customRange" name="points1">
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <div class="m-2">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="rounded m-4 mb-5" style="border: 1px solid white">
+                            <div class="m-2">
+                                <h1>cim</h1>
+                            </div>
+                            <div class="m-2">
+                                <input type="range" class="custom-range" id="customRange" name="points1">
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <div class="m-2">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="rounded m-4 mb-5" style="border: 1px solid white">
+                            <div class="m-2">
+                                <h1>cim</h1>
+                            </div>
+                            <div class="m-2">
+                                <input type="range" class="custom-range" id="customRange" name="points1">
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <div class="m-2">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="rounded m-4 mb-5" style="border: 1px solid white">
+                            <div class="m-2">
+                                <h1>cim</h1>
+                            </div>
+                            <div class="m-2">
+                                <input type="range" class="custom-range" id="customRange" name="points1">
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <div class="m-2">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div></div>
+                    <div></div>
                 </div>
             </div>
-            {{-- <div class="col-md-2">
-                <div class="d-flex flex-column computer-stat-column">
-                    <x-computer-stat title="Storage Size">{{ $computer->storage_size(true) }}</x-computer-stat>
-                    <x-computer-stat title="Storage Speed">{{ $computer->storage_speed(true) }}</x-computer-stat>
-                    <x-computer-stat title="GPU Speed">{{ $computer->gpu_speed(true) }}</x-computer-stat>
-                </div>
-            </div> --}}
+
         </div>
+
+        </div>
+        <div></div>
     </div>
     @foreach($inventoryManager->getItems() as $item)
     <div class="item_details_hover d-none" data-id="{{ $item->id }}">
