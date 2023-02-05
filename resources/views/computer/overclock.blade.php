@@ -1,27 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container bg-dark">
-        <div class="row">
-            <div class="col-md-3">
-                {{-- <div class="inventory">
-                    <div class="inventory-container">
-                        <div class="title">
-                            Inventory
-                        </div>
-                        <div class="inventory-items">
-                            @for($i = 0; $i < App\Managers\InventoryManager::$MAX_SLOTS; $i++)
-                                @php
-                                    $item = $inventoryManager->getItemAt($i);
-                                @endphp
-                                <x-item :item="$item" :slot-id="$i"/>
-                            @endfor
-                        </div>
-                    </div>
-                </div> --}}
-                <h1>inventory</h1>
+    <div class="container h-100 bg-dark">
+        <div class="row h-100">
+            <div class="col-md-3 inventory-list h-100">
+                @foreach ($inventoryManager->getItems() as $item)
+                    <x-list-item :item="$item"></x-list-item>
+                @endforeach
             </div>
-
             <div class="col-md-9">
                 <div class="row">
                     <div class="col-md-6">
@@ -89,16 +75,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div></div>
-                    <div></div>
-                </div>
             </div>
-
         </div>
-
-        </div>
-        <div></div>
     </div>
     @foreach($inventoryManager->getItems() as $item)
     <div class="item_details_hover d-none" data-id="{{ $item->id }}">
