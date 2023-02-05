@@ -80,6 +80,8 @@ class InventoryManager extends Model
     }
 
     public function hasSpace() {
-        return $this->getNextAvailableSlot() < $this->MAX_SLOTS;
+        $nextSlot = $this->getNextAvailableSlot();
+        if($nextSlot === null) return false;
+        return $nextSlot < InventoryManager::$MAX_SLOTS;
     }
 }

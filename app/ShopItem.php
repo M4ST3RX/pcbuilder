@@ -12,6 +12,10 @@ class ShopItem extends Model
 {
     use HasFactory;
 
+    public function shop() {
+        return $this->belongsTo(Shop::class, 'shop_id', 'id');
+    }
+
     public function getPrice() {
         if($this->discount > 0) {
             return number_format($this->price * ((100 - $this->discount) / 100), 2);

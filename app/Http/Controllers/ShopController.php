@@ -39,10 +39,9 @@ class ShopController extends Controller
         $computer = Computer::find(Session::get('computer_id'));
         $user = User::find(Auth::id());
         $inventoryManager = new InventoryManager();
-        $itemPrefab = $shop_item->item_prefab;
 
         $price = $shop_item->price;
-        $balance = $shop_item->shop->currency_id == 1 ? $user->money : $computer->wallet->getBalance($shop_item->shop->currency_id);
+        $balance = $shop_item->shop->currency_id == 1 ? $user->money / 100 : $computer->wallet->getBalance($shop_item->shop->currency_id);
 
         if(!$inventoryManager->hasSpace()) {
             return json_encode(['error' => true, 'message' => 'You don\'t have enough space in your inventory.', 'title' => 'Shop']);
@@ -62,11 +61,11 @@ class ShopController extends Controller
             }
 
             $ItemGenerator = new ItemGenerator();
-            $ItemGenerator->createItem($itemPrefab->tier, $itemPrefab->rarity, $itemPrefab->type);
+            $ItemGenerator->createItem($shop_item->tier, $shop_item->rarity, $shop_item->type);
         } else {
             return json_encode(['error' => true, 'message' => 'You don\'t have enough money.', 'title' => 'Shop']);
         }
 
-        return json_encode(['error' => false, 'message' => 'You have purchased the item <span class="item-name">' . $shop_item->item_prefab->name . '</span>', 'title' => 'Shop']);
+        return json_encode(['error' => false, 'message' => 'You have purchased the item <span class="item-name">' . $shop_item->getName() . '</span>', 'title' => 'Shop']);
     }
 }
