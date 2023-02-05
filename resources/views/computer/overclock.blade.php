@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container bg-dark h-100">
+    <div class="container h-100 bg-dark">
         <div class="row h-100">
             <div class="col-md-3 inventory-list h-100">
                 @foreach ($inventoryManager->getItems() as $item)
@@ -9,6 +9,72 @@
                 @endforeach
             </div>
             <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="rounded m-4 mb-5" style="border: 1px solid white">
+                            <div class="m-2">
+                                <h1>cim</h1>
+                            </div>
+                            <div class="m-2">
+                                <input type="range" class="custom-range" id="customRange" name="points1">
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <div class="m-2">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="rounded m-4 mb-5" style="border: 1px solid white">
+                            <div class="m-2">
+                                <h1>cim</h1>
+                            </div>
+                            <div class="m-2">
+                                <input type="range" class="custom-range" id="customRange" name="points1">
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <div class="m-2">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="rounded m-4 mb-5" style="border: 1px solid white">
+                            <div class="m-2">
+                                <h1>cim</h1>
+                            </div>
+                            <div class="m-2">
+                                <input type="range" class="custom-range" id="customRange" name="points1">
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <div class="m-2">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="rounded m-4 mb-5" style="border: 1px solid white">
+                            <div class="m-2">
+                                <h1>cim</h1>
+                            </div>
+                            <div class="m-2">
+                                <input type="range" class="custom-range" id="customRange" name="points1">
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <div class="m-2">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
